@@ -2,17 +2,20 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
 import erpModules from './erp.modules';
 
 const filterErpModuleRoute = (route) => {
-  // if (!!route.path) {
-  //   const modules = erpModules.filter(m => m.routerPath === route.path);
-  //   if (modules.length > 0) {
-  //     const module = modules[0];
-  //     return module.visible;
-  //   }
-  // }
+  if (!!route.path) {
+    var isChildRoute = !route.path.startsWith('/');
+    if (isChildRoute) return true;
 
-  // return false;
+    const modules = erpModules.filter(m => m.routerPath === route.path);
+    if (modules.length > 0) {
+      const module = modules[0];
+      return module.visible;
+    }
+  }
 
-  return true;
+  return false;
+
+  // return true;
 }
 
 /**

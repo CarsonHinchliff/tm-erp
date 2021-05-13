@@ -16,9 +16,9 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="10">
+          <el-col :span="8" class="pl-12">
             <el-form-item
-              label-width="65px"
+              label-width="45px"
               label="地址:"
               class="postInfo-container-item"
             >

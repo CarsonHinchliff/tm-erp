@@ -4,3 +4,10 @@ GET http://39.101.151.118:8080/sales/customers/
 
 ###
 GET http://localhost:9527/api/sales/customers/
+
+
+###
+POST http://39.101.151.118:8080/sales/customers/
+Content-Type: application/json
+
+{"name":"2345","phone":"343","address":"344"}
