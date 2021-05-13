@@ -64,8 +64,10 @@ export default {
     externalLink: 'External Link',
 
     //erp
-    Customer: 'Customer',
-    Order: 'Order'
+    CustomerManagement: 'Customer Management',
+    CustomerList: 'Customer List',
+    OrderManagement: 'Order Management',
+    OrderList: 'Order List'
   },
   navbar: {
     logOut: 'Log Out',

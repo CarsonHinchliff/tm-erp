@@ -13,6 +13,8 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
+console.log(config.dev.proxyTable)
+
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 

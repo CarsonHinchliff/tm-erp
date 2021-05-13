@@ -1,4 +1,19 @@
 import { asyncRouterMap, constantRouterMap } from '@/router'
+import erpModules from './erp.modules';
+
+const filterErpModuleRoute = (route) => {
+  // if (!!route.path) {
+  //   const modules = erpModules.filter(m => m.routerPath === route.path);
+  //   if (modules.length > 0) {
+  //     const module = modules[0];
+  //     return module.visible;
+  //   }
+  // }
+
+  // return false;
+
+  return true;
+}
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -23,7 +38,7 @@ function filterAsyncRouter(routes, roles) {
 
   routes.forEach(route => {
     const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
+    if (hasPermission(roles, tmp) && filterErpModuleRoute(tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRouter(tmp.children, roles)
       }

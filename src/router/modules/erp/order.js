@@ -6,15 +6,16 @@ const router = {
   redirect: '/order/index',
   name: 'Order',
   meta: {
-    title: 'Order',
+    title: 'OrderManagement',
     icon: 'table'
   },
+  alwaysShow: true,
   children: [
     {
       path: 'index',
       component: () => import('@/views/erp/order/index'),
       name: 'Order',
-      meta: { title: 'Order' }
+      meta: { title: 'OrderList' }
     }
   ]
 }

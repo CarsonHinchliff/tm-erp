@@ -64,8 +64,10 @@ export default {
     externalLink: '外链',
 
     //erp
-    Customer: '客户管理',
-    Order: '订单管理'
+    CustomerManagement: '客户管理',
+    CustomerList: '客户列表',
+    OrderManagement: '销售管理',
+    OrderList: '订单列表'
   },
   navbar: {
     logOut: '退出登录',

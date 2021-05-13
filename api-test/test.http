@@ -1,0 +1,6 @@
+###
+GET http://39.101.151.118:8080/sales/customers/
+
+
+###
+GET http://localhost:9527/api/sales/customers/

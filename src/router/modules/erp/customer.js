@@ -3,18 +3,19 @@ import Layout from '@/views/layout/Layout'
 const router = {
   path: '/customer',
   component: Layout,
-  redirect: '/customer/index',
+  redirect: 'noredirect',
   name: 'Customer',
   meta: {
-    title: 'Customer',
+    title: 'CustomerManagement',
     icon: 'table'
   },
+  alwaysShow: true,
   children: [
     {
       path: 'index',
       component: () => import('@/views/erp/customer/index'),
       name: 'Customer',
-      meta: { title: 'Customer' }
+      meta: { title: 'CustomerList' }   
     }
   ]
 }
