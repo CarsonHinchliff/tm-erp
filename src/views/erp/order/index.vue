@@ -209,7 +209,7 @@ export default {
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
-      currentEditOrder: null,
+      currentEditOrder: {},
       mergedColumnLabels: ['Id', '订单日期', '客户姓名', '电话', '已发货', '总价', '操作'],
       spanArr: [], //遍历数据时，根据相同的标识去存储记录
       posForMerge: 0 // 二维数组的索引
@@ -311,14 +311,14 @@ export default {
       this.currentPage = val;
     },
     clickEditFn(item) {
-      console.log(item.name);
       this.addUpdateMode = "edit";
-      this.currentEditCustomer = item;
+      this.currentEditOrder = {};
+      this.currentEditOrder.orderId = item.orderId;
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
       console.log(item);
-      deleteCustomer(item.id).then(
+      deleteOrder(item.id).then(
         (res) => {
           console.log(res);
           this.addupdateFormVisible = false;
@@ -336,7 +336,7 @@ export default {
     clickAddFn() {
       console.log("add");
       this.addUpdateMode = "new";
-      this.currentEditCustomer = {
+      this.currentEditOrder = {
         name: "",
         phone: "",
         address: "",
@@ -344,7 +344,7 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
-      saveCustomer(this.currentEditCustomer).then(
+      saveOrder(this.currentEditOrder).then(
         (res) => {
           console.log(res);
           this.addupdateFormVisible = false;

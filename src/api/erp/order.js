@@ -8,6 +8,13 @@ export function fetchList(query) {
   })
 }
 
+export function getOrder(id) {
+  return request({
+    url: '/api/sales/orders/' + id + '/',
+    method: 'get'
+  })
+}
+
 export function saveOrder(data) {
     return request({
       url: '/api/sales/orders/',
