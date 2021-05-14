@@ -15,7 +15,7 @@ const router = {
       path: 'index',
       component: () => import('@/views/erp/customer/index'),
       name: 'Customer',
-      meta: { title: 'CustomerList',  icon: 'table' }   
+      meta: { title: 'CustomerList', icon: 'table' }   
     }
   ]
 }
