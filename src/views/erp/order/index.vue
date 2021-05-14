@@ -1,9 +1,9 @@
 <template>
-  <div class="app-container">
+  <div class="app-container flex-container">
     <div>
       <el-form class="form-container">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="5">
             <el-form-item
               label-width="85px"
               label="订单日期:"
@@ -18,7 +18,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="5">
             <el-form-item
               label-width="98px"
               label="已发货:"
@@ -34,7 +34,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col :span="5">
             <el-form-item
               label-width="85px"
               label="客户姓名:"
@@ -47,7 +47,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8" class="pl-12">
+          <el-col :span="5" class="pl-12">
             <el-form-item
               label-width="85px"
               label="客户电话:"
@@ -141,6 +141,7 @@
       <el-table-column label="已发货">
         <template slot-scope="scope">
           <el-switch
+            disabled
             v-model="scope.row.orderIssuedAll"
             active-color="#13ce66"
             inactive-color="#ff4949"
@@ -165,7 +166,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="pagination">
+    <div class="pagination no-top-border">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -318,7 +319,7 @@ export default {
     },
     clickDeleteFn(item) {
       console.log(item);
-      deleteOrder(item.id).then(
+      deleteOrder(item.orderId).then(
         (res) => {
           console.log(res);
           this.addupdateFormVisible = false;

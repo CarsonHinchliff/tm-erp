@@ -143,6 +143,21 @@ code {
   padding: 20px;
 }
 
+.flex-container{
+  min-height: calc(100vh - 84px);
+  display: flex;
+  flex-flow: column;
+}
+
+.pagination{
+  background-color: #ebeef5;
+  color: black;
+}
+
+.no-top-border{
+  border-top: 0;
+}
+
 .components-container {
   margin: 30px 50px;
   position: relative;
@@ -202,4 +217,9 @@ code {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+.el-table th{
+  background-color: #ebeef5;
+  color:black;
 }

@@ -1,11 +1,11 @@
 <template>
-  <div class="app-container">
+  <div class="app-container flex-container">
     <div>
       <el-form class="form-container">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="5">
             <el-form-item
-              label-width="45px"
+              label-width="65PX"
               label="姓名:"
               class="postInfo-container-item"
             >
@@ -16,9 +16,9 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8" class="pl-12">
+          <el-col :span="5" class="pl-12">
             <el-form-item
-              label-width="45px"
+              label-width="65px"
               label="地址:"
               class="postInfo-container-item"
             >
@@ -58,7 +58,7 @@
       element-loading-text="拼命加载中"
       border
       fit
-      highlight-current-row
+      highlight-current-row  style="height:100%"
     >
       <el-table-column align="center" label="Id" width="95">
         <template slot-scope="scope">
@@ -97,7 +97,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="pagination">
+    <div class="pagination no-top-border">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
