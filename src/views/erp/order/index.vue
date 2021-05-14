@@ -170,7 +170,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-sizes="[10, 15, 20]"
+        :page-sizes="gridPageArray"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -191,6 +191,7 @@
 import { fetchList, saveOrder, deleteOrder } from "@/api/erp/order";
 import orderAddUpdate from "./addupdate";
 import { Message } from "element-ui";
+import { gridPageArray, getPageParam } from '../common/grid.page';
 export default {
   components: { orderAddUpdate },
   data() {
@@ -204,8 +205,9 @@ export default {
       minColumnWidth: 180,
       list: null,
       currentPage: 1,
-      pagesize: 10,
+      pagesize: gridPageArray[0],
       total: 0,
+      gridPageArray: gridPageArray,
       listLoading: true,
       autoWidth: true,
       addupdateFormVisible: false,
@@ -234,7 +236,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true;
-      fetchList().then((response) => {
+      fetchList(getPageParam(this.pagesize, this.currentPage)).then((response) => {
         this.list = this.transMergedResult(response.data.results);
         this.getSpanArr(this.list);
         this.total = response.data.count;
@@ -307,9 +309,11 @@ export default {
     },
     handleSizeChange(val) {
       this.pagesize = val;
+            this.fetchData();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
+            this.fetchData();
     },
     clickEditFn(item) {
       this.addUpdateMode = "edit";

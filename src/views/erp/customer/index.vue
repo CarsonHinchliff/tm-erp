@@ -101,7 +101,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-sizes="[10, 15, 20]"
+        :page-sizes="gridPageArray"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -122,6 +122,7 @@
 import { fetchList, saveCustomer, deleteCustomer } from "@/api/erp/customer";
 import customerAddUpdate from "./addupdate";
 import { Message } from 'element-ui';
+import { gridPageArray, getPageParam } from '../common/grid.page';
 export default {
   components: { customerAddUpdate },
   data() {
@@ -129,13 +130,14 @@ export default {
       filter: { name: "", address: "" },
       list: null,
       currentPage: 1,
-      pagesize: 10,
+      pagesize: gridPageArray[0],
       total: 0,
       listLoading: true,
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
       currentEditCustomer: null,
+      gridPageArray: gridPageArray
     };
   },
   created() {
@@ -153,7 +155,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true;
-      fetchList().then((response) => {
+      fetchList(getPageParam(this.pagesize, this.currentPage)).then((response) => {
         this.list = response.data.results;
         this.total = response.data.count;
         this.listLoading = false;
@@ -161,9 +163,11 @@ export default {
     },
     handleSizeChange(val) {
       this.pagesize = val;
+      this.fetchData();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
+      this.fetchData();
     },
     clickEditFn(item) {
       console.log(item.name);
