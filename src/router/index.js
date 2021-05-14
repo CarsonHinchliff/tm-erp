@@ -68,13 +68,21 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/customer/index',
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
+        enabled: false,
+        meta: { 
+          title: 'ERP管理系统', 
+          isHideIcon: true,
+          icon: 'dashboard', 
+          class: 'app-menu-item',
+          titleClass: 'app-menu-item-title',
+          noCache: true 
+        }
       }
     ]
   },

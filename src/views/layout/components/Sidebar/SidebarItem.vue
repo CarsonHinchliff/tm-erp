@@ -1,9 +1,9 @@
 <template>
   <div v-if="!item.hidden&&item.children" class="menu-wrapper">
         <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <a :href="onlyOneChild.path" target="_blank" @click="clickLink(onlyOneChild.path,$event)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon" :title="generateTitle(onlyOneChild.meta.title)" />
+      <a :href="onlyOneChild.path" target="_blank" @click="clickLink(onlyOneChild,$event)">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="[{'submenu-title-noDropdown':!isNest}, onlyOneChild.meta.class]">
+          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.isHideIcon ? null : onlyOneChild.meta.icon||item.meta.icon" :title="generateTitle(onlyOneChild.meta.title)" :titleClass="onlyOneChild.meta.titleClass"/>
         </el-menu-item>
       </a>
     </template>
@@ -22,7 +22,7 @@
           :base-path="resolvePath(child.path)"
           class="nest-menu" />
 
-        <a v-else :href="child.path" :key="child.name" target="_blank" @click="clickLink(child.path,$event)">
+        <a v-else :href="child.path" :key="child.name" target="_blank" @click="clickLink(child,$event)">
           <el-menu-item :index="resolvePath(child.path)">
             <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)" />
           </el-menu-item>
@@ -93,7 +93,14 @@ export default {
     isExternalLink(routePath) {
       return validateURL(routePath)
     },
-    clickLink(routePath, e) {
+    clickLink(route, e) {
+      if (route.enabled != undefined){
+        if (!route.enabled) {
+          e.preventDefault()
+          return false;
+        }
+      }
+      var routePath = route.path;
       if (!this.isExternalLink(routePath)) {
         e.preventDefault()
         const path = this.resolvePath(routePath)

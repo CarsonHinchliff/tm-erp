@@ -15,7 +15,7 @@ const router = {
       path: 'index',
       component: () => import('@/views/erp/order/index'),
       name: 'Order',
-      meta: { title: 'OrderList' }
+      meta: { title: 'OrderList', icon: 'table'}
     }
   ]
 }

@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="5">
             <el-form-item
-              label-width="65PX"
+              label-width="85PX"
               label="姓名:"
               class="postInfo-container-item"
             >
@@ -18,7 +18,7 @@
 
           <el-col :span="5" class="pl-12">
             <el-form-item
-              label-width="65px"
+              label-width="85px"
               label="地址:"
               class="postInfo-container-item"
             >
