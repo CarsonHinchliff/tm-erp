@@ -1,0 +1,32 @@
+###
+POST http://39.101.151.118:8080/sales/orders/
+Content-Type: application/json
+
+{
+    "order_num": 100,
+    "name": "test order1234",
+    "phone": "1234",
+    "address": "test address",
+    "order_detail": [
+        {
+            "clothe_num": "999",
+            "color": "green",
+            "amount": "10",
+            "price": "100"
+        },
+        {
+            "clothe_num": "9991",
+            "color": "green",
+            "amount": "10",
+            "price": "100"
+        },
+        {
+            "clothe_num": "9994",
+            "color": "green",
+            "amount": "10",
+            "price": "100"
+        }
+    ]
+}
+
+

@@ -9,7 +9,28 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+        '/api1': {
+          target: 'http://localhost:5000',
+          changeOrigin: true,
+          pathRewrite: {'^/api1' : 'http://localhost:5000'},
+          secure: false,
+          logLevel: "debug",
+          onProxyReq: function(proxyReq, req, res) {
+            console.log("original url: " + req.originalUrl, "proxy url: " + req.path);
+          }
+        },
+        '/api': {
+            target: 'http://39.101.151.118:8080',
+            changeOrigin: true,
+            pathRewrite: {'^/api' : 'http://39.101.151.118:8080'},
+            secure: false,
+            logLevel: "debug",
+            onProxyReq: function(proxyReq, req, res) {
+              console.log("original url: " + req.originalUrl, "proxy url: " + req.path);
+            }
+        }
+    },
 
     // Various Dev Server settings
 
@@ -17,7 +38,7 @@ module.exports = {
     // if you want dev by ip, please set host: '0.0.0.0'
     host: 'localhost',
     port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: false,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
@@ -25,7 +46,7 @@ module.exports = {
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
-    useEslint: true,
+    useEslint: false,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,
@@ -60,7 +81,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: '/',
+    assetsPublicPath: '/tm_erp/',
 
     /**
      * Source Maps

@@ -61,7 +61,13 @@ export default {
     theme: '换肤',
     clipboardDemo: 'Clipboard',
     i18n: '国际化',
-    externalLink: '外链'
+    externalLink: '外链',
+
+    //erp
+    CustomerManagement: '客户管理',
+    CustomerList: '客户列表',
+    OrderManagement: '销售管理',
+    OrderList: '订单列表'
   },
   navbar: {
     logOut: '退出登录',

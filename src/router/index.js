@@ -12,6 +12,9 @@ import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
 
+// erp
+import erpRouters from './modules/erp'
+
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  **/
@@ -65,13 +68,21 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/customer/index',
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
+        enabled: false,
+        meta: { 
+          title: 'ERP管理系统', 
+          isHideIcon: true,
+          icon: 'dashboard', 
+          class: 'app-menu-item',
+          titleClass: 'app-menu-item-title',
+          noCache: true 
+        }
       }
     ]
   },
@@ -79,6 +90,7 @@ export const constantRouterMap = [
     path: '/documentation',
     component: Layout,
     redirect: '/documentation/index',
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -92,6 +104,7 @@ export const constantRouterMap = [
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -160,6 +173,8 @@ export const asyncRouterMap = [
   chartsRouter,
   nestedRouter,
   tableRouter,
+
+  ...erpRouters,
 
   {
     path: '/example',
@@ -329,17 +344,6 @@ export const asyncRouterMap = [
         component: () => import('@/views/i18n-demo/index'),
         name: 'I18n',
         meta: { title: 'i18n', icon: 'international' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'externalLink', icon: 'link' }
       }
     ]
   },

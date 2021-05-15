@@ -184,3 +184,4 @@ if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
 }
 
 module.exports = webpackConfig
+
