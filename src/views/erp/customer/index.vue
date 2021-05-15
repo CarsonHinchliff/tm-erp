@@ -112,7 +112,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <customerAddUpdate :customer="currentEditCustomer"></customerAddUpdate>
+      <customerAddUpdate :customer="currentEditCustomer" ref="detailRef"></customerAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -176,16 +176,13 @@ export default {
       this.fetchData();
     },
     clickEditFn(item) {
-      console.log(item.name);
       this.addUpdateMode = "edit";
-      this.currentEditCustomer = item;
+      this.currentEditCustomer = {id: item.id};
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      console.log(item);
       deleteCustomer(item.id).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -199,7 +196,6 @@ export default {
       );
     },
     clickAddFn() {
-      console.log("add");
       this.addUpdateMode = "new";
       this.currentEditCustomer = {
         name: "",
@@ -209,9 +205,10 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
+      if(!this.$refs.detailRef.dlgSave()) return;
+
       saveCustomer(this.currentEditCustomer).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },

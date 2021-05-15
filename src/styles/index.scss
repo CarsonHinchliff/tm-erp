@@ -246,3 +246,22 @@ code {
   padding-bottom: 8px;
 }
 
+.required-star>label::after{
+  content: '*';
+  color: #e94444;
+}
+
+.el-table.required-star::after{
+  content: '*';
+  color: #e94444;
+}
+
+.value-required{
+  border: 1px solid red;
+  border-radius: 5px;
+}
+
+.value-required.el-table{
+  border: 1px solid red;
+}
+

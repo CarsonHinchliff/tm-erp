@@ -137,7 +137,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <incomeAddUpdate :income="currentEditIncome"></incomeAddUpdate>
+      <incomeAddUpdate :income="currentEditIncome" ref="detailRef"></incomeAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -201,16 +201,13 @@ export default {
       this.fetchData();
     },
     clickEditFn(item) {
-      console.log(item.name);
       this.addUpdateMode = "edit";
-      this.currentEditIncome = item;
+      this.currentEditIncome = {id: item.id};
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      console.log(item);
       deleteIncome(item.id).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -224,19 +221,20 @@ export default {
       );
     },
     clickAddFn() {
-      console.log("add");
       this.addUpdateMode = "new";
       this.currentEditIncome = {
         name: "",
         phone: "",
         address: "",
+        date: new Date()
       };
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
+      if(!this.$refs.detailRef.dlgSave()) return;
+
       saveIncome(this.currentEditIncome).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },

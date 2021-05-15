@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form class="form-container">
-      <el-row>
+      <el-row v-if="!!order.orderId">
         <el-col>
           <el-form-item
             label-width="85px"
@@ -22,9 +22,12 @@
           <el-form-item
             label-width="85px"
             label="订单日期:"
-            class="postInfo-container-item"
+            class="postInfo-container-item required-star"
           >
             <el-date-picker
+              :class="{
+                'value-required': !order.order_date && isSaveTriggered,
+              }"
               class="full-width"
               v-model="order.order_date"
               type="date"
@@ -55,9 +58,10 @@
           <el-form-item
             label-width="85px"
             label="客户姓名:"
-            class="postInfo-container-item"
+            class="postInfo-container-item required-star"
           >
             <el-input
+              :class="{ 'value-required': !order.name && isSaveTriggered }"
               v-model="order.name"
               placeholder="请输入客户姓名"
               clearable
@@ -70,9 +74,10 @@
           <el-form-item
             label-width="85px"
             label="客户电话:"
-            class="postInfo-container-item"
+            class="postInfo-container-item required-star"
           >
             <el-input
+              :class="{ 'value-required': !order.phone && isSaveTriggered }"
               v-model="order.phone"
               placeholder="请输入客户电话"
               clearable
@@ -85,9 +90,10 @@
           <el-form-item
             label-width="85px"
             label="客户地址:"
-            class="postInfo-container-item"
+            class="postInfo-container-item required-star"
           >
             <el-input
+              :class="{ 'value-required': !order.address && isSaveTriggered }"
               v-model="order.address"
               placeholder="请输入地址"
               clearable
@@ -116,6 +122,14 @@
       <div><hr class="light-bg-hr" /></div>
       <el-row>
         <el-table
+          ref="orderDetailTableRef"
+          :class="{
+            'value-required':
+              order.order_detail &&
+              order.order_detail.length == 0 &&
+              isSaveTriggered,
+          }"
+          height="250"
           v-loading="listLoading"
           :data="order.order_detail"
           row-key="id"
@@ -123,6 +137,13 @@
           border
           fit
         >
+          <el-table-column
+            label="序号"
+            width="auto"
+            align="center"
+            type="index"
+          >
+          </el-table-column>
           <el-table-column label="款号" width="auto" align="center">
             <template slot-scope="scope">
               {{ scope.row.clothe_num }}
@@ -167,6 +188,7 @@
         <div class="form-title">编辑订单明细<span></span></div>
       </template>
       <orderDetailAddUpdate
+        ref="orderDetailRef"
         :detail="currentEditOrderDetail"
       ></orderDetailAddUpdate>
       <div slot="footer" class="dialog-footer">
@@ -195,6 +217,7 @@ export default {
       addUpdateMode: "",
       addupdateFormVisible: false,
       currentEditOrderDetail: {},
+      isSaveTriggered: false,
     };
   },
   created() {
@@ -202,20 +225,27 @@ export default {
   },
   watch: {
     order(newVal, oldVal) {
-      if (newVal) {
+      if (newVal && newVal != oldVal) {
+        this.isSaveTriggered = false;
         this.fetchData(newVal.orderId);
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.ensureOrderEntity();
+  },
   methods: {
+    ensureOrderEntity() {
+      if (!this.order.order_detail) {
+        this.order.order_detail = [];
+      }
+    },
     fetchData(orderId) {
       if (!orderId) return;
 
       getOrder(orderId).then((res) => {
         this.listLoading = true;
         Object.assign(this.order, res.data);
-        console.log(this.order);
         this.$forceUpdate();
         this.listLoading = false;
       });
@@ -233,20 +263,39 @@ export default {
       this.addUpdateMode = "new";
       this.currentEditOrderDetail = {
         clothe_num: "",
-        amount: "",
+        amount: 0,
         color: "",
-        price: "",
+        price: 0,
       };
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
-      if (
-        (this.order.order_detail || []).indexOf(this.currentEditOrderDetail) ==
-        -1
-      ) {
-        (this.order.order_detail || []).push(this.currentEditOrderDetail);
+      if (!this.$refs.orderDetailRef.dlgSave()) {
+        return;
+      }
+
+      if (this.order.order_detail.indexOf(this.currentEditOrderDetail) == -1) {
+        this.order.order_detail.push(this.currentEditOrderDetail);
       }
       this.addupdateFormVisible = false;
+    },
+    dlgSave() {
+      this.isSaveTriggered = true;
+      var isAllRequiredFieldFilled = true;
+      (this.$el.querySelectorAll(".required-star input") || []).forEach(
+        (element) => {
+          if (element.value == "") {
+            isAllRequiredFieldFilled = false;
+          }
+        }
+      );
+
+      var tableRef = this.$refs.orderDetailTableRef;
+      var isAnyDetailRecord = tableRef.data.length > 0;
+
+      this.$forceUpdate();
+
+      return isAllRequiredFieldFilled && isAnyDetailRecord;
     },
   },
 };

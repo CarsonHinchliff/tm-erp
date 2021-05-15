@@ -126,7 +126,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <incomeAddUpdate :income="currentEditInventory"></incomeAddUpdate>
+      <inventoryAddUpdate :inventory="currentEditInventory" ref="detailRef"></inventoryAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -138,11 +138,11 @@
 
 <script>
 import { fetchInventoryList, saveInventory, deleteInventory } from "@/api/erp/warehouse";
-import incomeAddUpdate from "./addupdate";
+import inventoryAddUpdate from "./addupdate";
 import { Message } from "element-ui";
 import { gridPageArray, getPageParam } from "../../common/grid.page";
 export default {
-  components: { incomeAddUpdate },
+  components: { inventoryAddUpdate },
   data() {
     return {
       filter: { date: "", number: "", color: "" },
@@ -190,16 +190,13 @@ export default {
       this.fetchData();
     },
     clickEditFn(item) {
-      console.log(item.name);
       this.addUpdateMode = "edit";
-      this.currentEditInventory = item;
+      this.currentEditInventory = {id: item.id};
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      console.log(item);
       deleteInventory(item.id).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -213,7 +210,6 @@ export default {
       );
     },
     clickAddFn() {
-      console.log("add");
       this.addUpdateMode = "new";
       this.currentEditInventory = {
         name: "",
@@ -223,9 +219,10 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
+      if(!this.$refs.detailRef.dlgSave()) return;
+
       saveInventory(this.currentEditInventory).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },

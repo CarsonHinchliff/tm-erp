@@ -8,6 +8,13 @@ export function fetchList(query) {
   })
 }
 
+export function getCustomer(id) {
+  return request({
+    url: '/api/sales/customers/' + id + '/',
+    method: 'get'
+  })
+}
+
 export function saveCustomer(data) {
     return request({
       url: '/api/sales/customers/',

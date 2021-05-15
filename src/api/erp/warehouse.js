@@ -7,6 +7,12 @@ export function fetchIncomeList(query) {
     params: query
   })
 }
+export function getIncome(id) {
+  return request({
+    url: '/api/warehouse/income/' + id + '/',
+    method: 'get'
+  })
+}
 
 export function saveIncome(data) {
     return request({
@@ -30,6 +36,14 @@ export function fetchInventoryList(query) {
     params: query
   })
 }
+
+export function getInventory(id) {
+  return request({
+    url: '/api/warehouse/inventory/' + id + '/',
+    method: 'get'
+  })
+}
+
 
 export function saveInventory(data) {
     return request({

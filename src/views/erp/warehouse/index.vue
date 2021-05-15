@@ -176,16 +176,13 @@ export default {
       this.fetchData();
     },
     clickEditFn(item) {
-      console.log(item.name);
       this.addUpdateMode = "edit";
       this.currentEditCustomer = item;
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      console.log(item);
       deleteCustomer(item.id).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -199,7 +196,6 @@ export default {
       );
     },
     clickAddFn() {
-      console.log("add");
       this.addUpdateMode = "new";
       this.currentEditCustomer = {
         name: "",
@@ -211,7 +207,6 @@ export default {
     clickSaveFn() {
       saveCustomer(this.currentEditCustomer).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },

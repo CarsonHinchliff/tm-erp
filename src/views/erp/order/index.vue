@@ -82,7 +82,8 @@
       </div>
     </div>
     <div><hr class="light-bg-hr" /></div>
-    <el-table
+    <el-table 
+      height="400"
       v-loading="listLoading"
       :data="list"
       row-key="id"
@@ -180,7 +181,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <orderAddUpdate :order="currentEditOrder"></orderAddUpdate>
+      <orderAddUpdate :order="currentEditOrder" ref="orderRef"></orderAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -217,7 +218,7 @@ export default {
       addUpdateMode: "",
       currentEditOrder: {},
       mergedColumnLabels: [
-        "Id",
+        "ID",
         "订单日期",
         "客户姓名",
         "电话",
@@ -278,7 +279,6 @@ export default {
           }
         }
       });
-      console.log(this.spanArr, this.posForMerge);
     },
     // 列表方法
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -315,7 +315,6 @@ export default {
         }
       });
 
-      console.log(orderDetailsResult);
       return orderDetailsResult;
     },
     handleSizeChange(val) {
@@ -328,15 +327,12 @@ export default {
     },
     clickEditFn(item) {
       this.addUpdateMode = "edit";
-      this.currentEditOrder = {};
-      this.currentEditOrder.orderId = item.orderId;
+      this.currentEditOrder = {orderId: item.orderId};
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      console.log(item);
       deleteOrder(item.orderId).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -350,19 +346,21 @@ export default {
       );
     },
     clickAddFn() {
-      console.log("add");
       this.addUpdateMode = "new";
       this.currentEditOrder = {
         name: "",
         phone: "",
         address: "",
+        order_date: new Date(),
+        order_detail: []
       };
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
+      if(!this.$refs.orderRef.dlgSave()) return;
+
       saveOrder(this.currentEditOrder).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
