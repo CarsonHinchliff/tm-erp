@@ -99,10 +99,7 @@
             class="postInfo-container-item fr"
             style="margin-bottom: 2px"
           >
-            <el-button
-              @click="clickAddFn"
-              type="success"
-              class="el-button--mini"
+            <el-button @click="clickAddFn" type="success" class=""
               ><span
                 ><i class="el-icon-circle-plus"></i
                 ><span class="icon-name">新增</span></span
@@ -111,6 +108,7 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <div><hr class="light-bg-hr" /></div>
       <el-row>
         <el-table
           v-loading="listLoading"
@@ -159,15 +157,15 @@
         </el-table>
       </el-row>
     </el-form>
-    <el-dialog
-      title="编辑订单明细"
-      :visible.sync="addupdateFormVisible"
-      append-to-body
-    >
+    <el-dialog :visible.sync="addupdateFormVisible" append-to-body>
+      <template slot="title">
+        <div class="form-title">编辑订单明细<span></span></div>
+      </template>
       <orderDetailAddUpdate
         :detail="currentEditOrderDetail"
       ></orderDetailAddUpdate>
       <div slot="footer" class="dialog-footer">
+        <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="clickSaveFn">确 定</el-button>
       </div>

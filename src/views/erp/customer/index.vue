@@ -27,38 +27,35 @@
                 placeholder="请输入内容"
               ></el-input> </el-form-item
           ></el-col>
-
-          <el-col :span="6">
-            <el-form-item
-              label-width="45px"
-              label=""
-              class="postInfo-container-item"
-            >
-              <el-button @click="fetchData" type="primary"
-                ><span
-                  ><i class="el-icon-search"></i
-                  ><span class="icon-name">查询</span></span
-                ></el-button
-              >
-              <span></span>
-              <el-button @click="clickAddFn" type="success"
-                ><span
-                  ><i class="el-icon-circle-plus"></i
-                  ><span class="icon-name">新增</span></span
-                ></el-button
-              >
-            </el-form-item>
-          </el-col>
         </el-row>
       </el-form>
     </div>
+    <div>
+      <div class="fr">
+        <el-button @click="fetchData" type="primary"
+          ><span
+            ><i class="el-icon-search"></i
+            ><span class="icon-name">查询</span></span
+          ></el-button
+        >
+        <span></span>
+        <el-button @click="clickAddFn" type="success"
+          ><span
+            ><i class="el-icon-circle-plus"></i
+            ><span class="icon-name">新增</span></span
+          ></el-button
+        >
+      </div>
+    </div>
+    <div><hr class="light-bg-hr" /></div>
     <el-table
       v-loading="listLoading"
       :data="list"
       element-loading-text="拼命加载中"
       border
       fit
-      highlight-current-row  style="height:100%"
+      highlight-current-row
+      style="height: 100%"
     >
       <el-table-column align="center" label="Id" width="95">
         <template slot-scope="scope">
@@ -108,9 +105,13 @@
       >
       </el-pagination>
     </div>
-    <el-dialog :title="addUpdateTitle" :visible.sync="addupdateFormVisible">
+    <el-dialog :visible.sync="addupdateFormVisible">
+      <template slot="title">
+        <div class="form-title">{{ addUpdateTitle }}<span></span></div>
+      </template>
       <customerAddUpdate :customer="currentEditCustomer"></customerAddUpdate>
       <div slot="footer" class="dialog-footer">
+        <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="clickSaveFn">确 定</el-button>
       </div>
@@ -121,8 +122,8 @@
 <script>
 import { fetchList, saveCustomer, deleteCustomer } from "@/api/erp/customer";
 import customerAddUpdate from "./addupdate";
-import { Message } from 'element-ui';
-import { gridPageArray, getPageParam } from '../common/grid.page';
+import { Message } from "element-ui";
+import { gridPageArray, getPageParam } from "../common/grid.page";
 export default {
   components: { customerAddUpdate },
   data() {
@@ -137,7 +138,7 @@ export default {
       addupdateFormVisible: false,
       addUpdateMode: "",
       currentEditCustomer: null,
-      gridPageArray: gridPageArray
+      gridPageArray: gridPageArray,
     };
   },
   created() {
@@ -155,11 +156,13 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true;
-      fetchList(getPageParam(this.pagesize, this.currentPage)).then((response) => {
-        this.list = response.data.results;
-        this.total = response.data.count;
-        this.listLoading = false;
-      });
+      fetchList(getPageParam(this.pagesize, this.currentPage)).then(
+        (response) => {
+          this.list = response.data.results;
+          this.total = response.data.count;
+          this.listLoading = false;
+        }
+      );
     },
     handleSizeChange(val) {
       this.pagesize = val;
