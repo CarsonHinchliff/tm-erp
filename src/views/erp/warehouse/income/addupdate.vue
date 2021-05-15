@@ -4,58 +4,75 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="45px"
+            label-width="85px"
+            label="入库日期:"
+            class="postInfo-container-item"
+          >
+              <el-date-picker
+              class="full-width"
+              v-model="income.date"
+              type="date"
+              placeholder="订单日期"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item
+            label-width="85px"
+            label="包号:"
+            class="postInfo-container-item"
+          >
+            <el-input
+              v-model="income.bag_num"
+              placeholder="请输入包号"
+              clearable
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item
+            label-width="85px"
             label="款号:"
             class="postInfo-container-item"
           >
             <el-input
-              v-model="detail.clothe_num"
+              v-model="income.clothe_num"
               placeholder="请输入款号"
               clearable
             ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+        <el-row>
         <el-col>
           <el-form-item
-            label-width="45px"
-            label="数量:"
-            class="postInfo-container-item"
-          >
-            <el-input
-              v-model="detail.amount"
-              placeholder="请输入数量"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-form-item
-            label-width="45px"
+            label-width="85px"
             label="颜色:"
             class="postInfo-container-item"
           >
             <el-input
-              v-model="detail.color"
+              v-model="income.color"
               placeholder="请输入颜色"
               clearable
             ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+        <el-row>
         <el-col>
           <el-form-item
-            label-width="45px"
-            label="单价:"
+            label-width="85px"
+            label="数量:"
             class="postInfo-container-item"
           >
             <el-input
-              v-model="detail.price"
-              placeholder="请输入单价"
+              v-model="income.amount"
+              placeholder="请输入数量"
               clearable
             ></el-input>
           </el-form-item>
@@ -67,9 +84,9 @@
 
 <script>
 export default {
-  name: "orderDetailAddUpdate",
+  name: "incomeAddUpdate",
   props: {
-    detail: {
+    income: {
       required: true,
     },
   },
@@ -78,7 +95,7 @@ export default {
   },
   methods: {
     test() {
-      console.log(this.detail.name);
+      console.log(this.income.name);
     },
   },
 };

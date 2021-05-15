@@ -12,6 +12,7 @@
               disabled
               v-model="order.order_num"
               placeholder="请输入订单号"
+              clearable
             ></el-input>
           </el-form-item>
         </el-col>
@@ -59,6 +60,7 @@
             <el-input
               v-model="order.name"
               placeholder="请输入客户姓名"
+              clearable
             ></el-input>
           </el-form-item>
         </el-col>
@@ -73,6 +75,7 @@
             <el-input
               v-model="order.phone"
               placeholder="请输入客户电话"
+              clearable
             ></el-input>
           </el-form-item>
         </el-col>
@@ -87,10 +90,12 @@
             <el-input
               v-model="order.address"
               placeholder="请输入地址"
+              clearable
             ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
+      <div><hr class="light-bg-hr" /></div>
       <el-row>
         <el-col>
           <el-form-item

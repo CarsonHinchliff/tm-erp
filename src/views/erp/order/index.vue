@@ -11,7 +11,7 @@
             >
               <el-date-picker
                 class="full-width"
-                v-model="filter.orderDate"
+                v-model="filter.date"
                 type="date"
                 placeholder="选择日期"
               >
@@ -25,7 +25,7 @@
               class="postInfo-container-item"
             >
               <el-switch
-                v-model="filter.orderIssued"
+                v-model="filter.issued_all"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
               >
@@ -41,8 +41,9 @@
               class="postInfo-container-item"
             >
               <el-input
-                v-model="filter.customerName"
+                v-model="filter.customer"
                 placeholder="请输入客户姓名"
+                clearable
               ></el-input>
             </el-form-item>
           </el-col>
@@ -54,13 +55,15 @@
               class="postInfo-container-item"
             >
               <el-input
-                v-model="filter.customerPhone"
+                v-model="filter.phone"
                 placeholder="请输入客户电话"
+                clearable
               ></el-input> </el-form-item
           ></el-col>
         </el-row>
       </el-form>
     </div>
+    <div><hr class="light-bg-hr" /></div>
     <div>
       <div class="fr">
         <el-button @click="fetchData" type="primary"
@@ -89,7 +92,7 @@
       highlight-current-row
       :span-method="objectSpanMethod"
     >
-      <el-table-column align="center" label="Id" width="95">
+      <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.orderId }}
         </template>
@@ -197,10 +200,10 @@ export default {
   data() {
     return {
       filter: {
-        customerName: "",
-        customerPhone: "",
-        orderDate: "",
-        orderIssued: false,
+        customer: "",
+        phone: "",
+        date: "",
+        issued_all: false,
       },
       minColumnWidth: 180,
       list: null,
@@ -242,7 +245,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true;
-      fetchList(getPageParam(this.pagesize, this.currentPage)).then(
+      fetchList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
         (response) => {
           this.list = this.transMergedResult(response.data.results);
           this.getSpanArr(this.list);

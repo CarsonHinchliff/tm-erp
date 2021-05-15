@@ -6,26 +6,40 @@
           <el-col :span="5">
             <el-form-item
               label-width="85PX"
-              label="姓名:"
+              label="出库日期:"
               class="postInfo-container-item"
             >
-              <el-input
-                v-model="filter.name"
-                placeholder="请输入姓名"
-                clearable
-              ></el-input>
+              <el-date-picker
+                class="full-width"
+                v-model="filter.date"
+                type="date"
+                placeholder="选择日期"
+              >
+              </el-date-picker>
             </el-form-item>
           </el-col>
 
           <el-col :span="5" class="pl-12">
             <el-form-item
               label-width="85px"
-              label="地址:"
+              label="款号:"
               class="postInfo-container-item"
             >
               <el-input
-                v-model="filter.address"
-                placeholder="请输入地址"
+                v-model="filter.number"
+                placeholder="请输入款号"
+                clearable
+              ></el-input> </el-form-item
+          ></el-col>
+          <el-col :span="5" class="pl-12">
+            <el-form-item
+              label-width="85px"
+              label="颜色:"
+              class="postInfo-container-item"
+            >
+              <el-input
+                v-model="filter.color"
+                placeholder="请输入颜色"
                 clearable
               ></el-input> </el-form-item
           ></el-col>
@@ -65,19 +79,19 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" width="180" align="center">
+      <el-table-column label="款号">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.clothe_num }}
         </template>
       </el-table-column>
-      <el-table-column label="电话" width="115" align="center">
+      <el-table-column label="颜色">
         <template slot-scope="scope">
-          {{ scope.row.phone }}
+          {{ scope.row.color }}
         </template>
       </el-table-column>
-      <el-table-column label="地址">
+      <el-table-column label="数量">
         <template slot-scope="scope">
-          {{ scope.row.address }}
+          {{ scope.row.amount }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="115" align="center">
@@ -112,7 +126,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <customerAddUpdate :customer="currentEditCustomer"></customerAddUpdate>
+      <incomeAddUpdate :income="currentEditInventory"></incomeAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -123,15 +137,15 @@
 </template>
 
 <script>
-import { fetchList, saveCustomer, deleteCustomer } from "@/api/erp/customer";
-import customerAddUpdate from "./addupdate";
+import { fetchInventoryList, saveInventory, deleteInventory } from "@/api/erp/warehouse";
+import incomeAddUpdate from "./addupdate";
 import { Message } from "element-ui";
-import { gridPageArray, getPageParam } from "../common/grid.page";
+import { gridPageArray, getPageParam } from "../../common/grid.page";
 export default {
-  components: { customerAddUpdate },
+  components: { incomeAddUpdate },
   data() {
     return {
-      filter: { name: "", address: "", phone: "" },
+      filter: { date: "", number: "", color: "" },
       list: null,
       currentPage: 1,
       pagesize: gridPageArray[0],
@@ -140,7 +154,7 @@ export default {
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
-      currentEditCustomer: null,
+      currentEditInventory: null,
       gridPageArray: gridPageArray,
     };
   },
@@ -152,14 +166,14 @@ export default {
       return (
         (!!this.addUpdateMode && this.addUpdateMode == "new"
           ? "新建"
-          : "编辑") + "客户信息"
+          : "编辑") + "出库信息"
       );
     },
   },
   methods: {
     fetchData() {
       this.listLoading = true;
-      fetchList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
+      fetchInventoryList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
         (response) => {
           this.list = response.data.results;
           this.total = response.data.count;
@@ -178,12 +192,12 @@ export default {
     clickEditFn(item) {
       console.log(item.name);
       this.addUpdateMode = "edit";
-      this.currentEditCustomer = item;
+      this.currentEditInventory = item;
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
       console.log(item);
-      deleteCustomer(item.id).then(
+      deleteInventory(item.id).then(
         (res) => {
           console.log(res);
           this.addupdateFormVisible = false;
@@ -201,7 +215,7 @@ export default {
     clickAddFn() {
       console.log("add");
       this.addUpdateMode = "new";
-      this.currentEditCustomer = {
+      this.currentEditInventory = {
         name: "",
         phone: "",
         address: "",
@@ -209,7 +223,7 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
-      saveCustomer(this.currentEditCustomer).then(
+      saveInventory(this.currentEditInventory).then(
         (res) => {
           console.log(res);
           this.addupdateFormVisible = false;

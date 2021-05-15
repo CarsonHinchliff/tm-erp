@@ -10,7 +10,7 @@
           >
             <el-input
               v-model="customer.name"
-              placeholder="请输入姓名"
+              placeholder="请输入内容"
               clearable
             ></el-input>
           </el-form-item>
@@ -25,7 +25,7 @@
           >
             <el-input
               v-model="customer.phone"
-              placeholder="请输入电话"
+              placeholder="请输入内容"
               clearable
             ></el-input>
           </el-form-item>

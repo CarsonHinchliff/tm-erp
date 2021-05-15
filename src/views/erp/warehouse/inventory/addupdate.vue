@@ -4,43 +4,43 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="45px"
-            label="姓名:"
+            label-width="85px"
+            label="款号:"
             class="postInfo-container-item"
           >
             <el-input
-              v-model="customer.name"
-              placeholder="请输入姓名"
+              v-model="income.clothe_num"
+              placeholder="请输入款号"
               clearable
             ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+        <el-row>
         <el-col>
           <el-form-item
-            label-width="45px"
-            label="电话:"
+            label-width="85px"
+            label="颜色:"
             class="postInfo-container-item"
           >
             <el-input
-              v-model="customer.phone"
-              placeholder="请输入电话"
+              v-model="income.color"
+              placeholder="请输入颜色"
               clearable
             ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+        <el-row>
         <el-col>
           <el-form-item
-            label-width="45px"
-            label="地址:"
+            label-width="85px"
+            label="数量:"
             class="postInfo-container-item"
           >
             <el-input
-              v-model="customer.address"
-              placeholder="请输入地址"
+              v-model="income.amount"
+              placeholder="请输入数量"
               clearable
             ></el-input>
           </el-form-item>
@@ -52,9 +52,9 @@
 
 <script>
 export default {
-  name: "customerAddUpdate",
+  name: "incomeAddUpdate",
   props: {
-    customer: {
+    income: {
       required: true,
     },
   },
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     test() {
-      console.log(this.customer.name);
+      console.log(this.income.name);
     },
   },
 };
