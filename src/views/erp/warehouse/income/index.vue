@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container flex-container" v-mouse-enter-trigger="fetchData">
-    <div>
+  <div class="app-container flex-container">
+    <div v-mouse-enter-trigger="fetchData">
       <el-form class="form-container">
         <el-row>
           <el-col :span="5">
@@ -133,7 +133,7 @@
       >
       </el-pagination>
     </div>
-    <el-dialog :visible.sync="addupdateFormVisible">
+    <el-dialog :visible.sync="addupdateFormVisible" v-mouse-enter-trigger="clickSaveFn">
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>

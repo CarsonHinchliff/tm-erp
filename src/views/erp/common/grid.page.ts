@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-var array = [50, 100, 200];
+var array = [10, 50, 100, 200];
 
 function isObject(filter) {
     return !!filter && typeof(filter) == 'object';
@@ -25,7 +25,7 @@ function getPageParam(size, page, filter){
     var param = {'page': page, 'size': size};
     if (isObject(filter)){
         transDate(filter);
-        return Object.assign(page, filter);
+        return Object.assign(param, filter);
     }
     return param;
 }

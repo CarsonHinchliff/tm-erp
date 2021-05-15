@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container flex-container" v-mouse-enter-trigger="fetchData">
-    <div>
+  <div class="app-container flex-container">
+    <div v-mouse-enter-trigger="fetchData">
       <el-form class="form-container">
         <el-row>
           <el-col :span="5">
