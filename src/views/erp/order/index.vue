@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container flex-container">
+  <div class="app-container flex-container" v-mouse-enter-trigger="fetchData">
     <div>
       <el-form class="form-container">
         <el-row>

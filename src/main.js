@@ -27,6 +27,8 @@ Vue.use(Element, {
 })
 
 import './widgets'
+import { directiveInstall } from '@/directive/erp'
+directiveInstall()
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
