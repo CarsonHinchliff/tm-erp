@@ -11,12 +11,12 @@ const router = {
   },
   alwaysShow: true,
   children: [
-    {
-      path: 'index',
-      component: () => import('@/views/erp/warehouse/index'),
-      name: 'Warehouse',
-      meta: { title: 'WarehouseList', icon: 'table' }   
-    },
+    // {
+    //   path: 'index',
+    //   component: () => import('@/views/erp/warehouse/index'),
+    //   name: 'Warehouse',
+    //   meta: { title: 'WarehouseList', icon: 'table' }   
+    // },
     {
         path: 'income',
         component: () => import('@/views/erp/warehouse/income/index'),

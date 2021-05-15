@@ -4,6 +4,7 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import './btn.scss';
+@import './el-dialog.fix.scss';
 
 body {
   height: 100%;
@@ -244,3 +245,4 @@ code {
   border-bottom: 1px solid #ebeef5;
   padding-bottom: 8px;
 }
+
