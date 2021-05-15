@@ -1,6 +1,6 @@
 <template>
   <div class="app-container flex-container">
-    <div>
+    <div v-mouse-enter-trigger="fetchData">
       <el-form class="form-container">
         <el-row>
           <el-col :span="5">
@@ -11,7 +11,7 @@
             >
               <el-date-picker
                 class="full-width"
-                v-model="filter.orderDate"
+                v-model="filter.date"
                 type="date"
                 placeholder="选择日期"
               >
@@ -25,7 +25,7 @@
               class="postInfo-container-item"
             >
               <el-switch
-                v-model="filter.orderIssued"
+                v-model="filter.issued_all"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
               >
@@ -41,8 +41,9 @@
               class="postInfo-container-item"
             >
               <el-input
-                v-model="filter.customerName"
+                v-model="filter.customer"
                 placeholder="请输入客户姓名"
+                clearable
               ></el-input>
             </el-form-item>
           </el-col>
@@ -54,36 +55,35 @@
               class="postInfo-container-item"
             >
               <el-input
-                v-model="filter.customerPhone"
+                v-model="filter.phone"
                 placeholder="请输入客户电话"
+                clearable
               ></el-input> </el-form-item
           ></el-col>
-
-          <el-col :span="6">
-            <el-form-item
-              label-width="45px"
-              label=""
-              class="postInfo-container-item"
-            >
-              <el-button @click="fetchData" type="primary"
-                ><span
-                  ><i class="el-icon-search"></i
-                  ><span class="icon-name">查询</span></span
-                ></el-button
-              >
-              <span></span>
-              <el-button @click="clickAddFn" type="success"
-                ><span
-                  ><i class="el-icon-circle-plus"></i
-                  ><span class="icon-name">新增</span></span
-                ></el-button
-              >
-            </el-form-item>
-          </el-col>
         </el-row>
       </el-form>
     </div>
-    <el-table
+    <div><hr class="light-bg-hr" /></div>
+    <div>
+      <div class="fr">
+        <el-button @click="fetchData" type="primary"
+          ><span
+            ><i class="el-icon-search"></i
+            ><span class="icon-name">查询</span></span
+          ></el-button
+        >
+        <span></span>
+        <el-button @click="clickAddFn" type="success"
+          ><span
+            ><i class="el-icon-circle-plus"></i
+            ><span class="icon-name">新增</span></span
+          ></el-button
+        >
+      </div>
+    </div>
+    <div><hr class="light-bg-hr" /></div>
+    <el-table 
+      height="400"
       v-loading="listLoading"
       :data="list"
       row-key="id"
@@ -93,7 +93,7 @@
       highlight-current-row
       :span-method="objectSpanMethod"
     >
-      <el-table-column align="center" label="Id" width="95">
+      <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.orderId }}
         </template>
@@ -110,7 +110,7 @@
       </el-table-column>
       <el-table-column label="款号" :width="minColumnWidth" align="center">
         <template slot-scope="scope">
-          {{ scope.row['clothe_num'] }}
+          {{ scope.row["clothe_num"] }}
         </template>
       </el-table-column>
       <el-table-column label="颜色" :width="minColumnWidth" align="center">
@@ -130,7 +130,7 @@
       </el-table-column>
       <el-table-column label="总价" :width="minColumnWidth" align="center">
         <template slot-scope="scope">
-          {{ scope.row['total_price'] }}
+          {{ scope.row["total_price"] }}
         </template>
       </el-table-column>
       <el-table-column label="电话" width="115" align="center">
@@ -177,9 +177,13 @@
       >
       </el-pagination>
     </div>
-    <el-dialog :title="addUpdateTitle" :visible.sync="addupdateFormVisible">
-      <orderAddUpdate :order="currentEditOrder"></orderAddUpdate>
+    <el-dialog :visible.sync="addupdateFormVisible">
+      <template slot="title">
+        <div class="form-title">{{ addUpdateTitle }}<span></span></div>
+      </template>
+      <orderAddUpdate :order="currentEditOrder" ref="orderRef"></orderAddUpdate>
       <div slot="footer" class="dialog-footer">
+        <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="clickSaveFn">确 定</el-button>
       </div>
@@ -191,16 +195,16 @@
 import { fetchList, saveOrder, deleteOrder } from "@/api/erp/order";
 import orderAddUpdate from "./addupdate";
 import { Message } from "element-ui";
-import { gridPageArray, getPageParam } from '../common/grid.page';
+import { gridPageArray, getPageParam } from "../common/grid.page";
 export default {
   components: { orderAddUpdate },
   data() {
     return {
       filter: {
-        customerName: "",
-        customerPhone: "",
-        orderDate: "",
-        orderIssued: false,
+        customer: "",
+        phone: "",
+        date: "",
+        issued_all: false,
       },
       minColumnWidth: 180,
       list: null,
@@ -213,9 +217,17 @@ export default {
       addupdateFormVisible: false,
       addUpdateMode: "",
       currentEditOrder: {},
-      mergedColumnLabels: ['Id', '订单日期', '客户姓名', '电话', '已发货', '总价', '操作'],
+      mergedColumnLabels: [
+        "ID",
+        "订单日期",
+        "客户姓名",
+        "电话",
+        "已发货",
+        "总价",
+        "操作",
+      ],
       spanArr: [], //遍历数据时，根据相同的标识去存储记录
-      posForMerge: 0 // 二维数组的索引
+      posForMerge: 0, // 二维数组的索引
     };
   },
   created() {
@@ -230,102 +242,97 @@ export default {
       );
     },
   },
-  mounted: function () {
-
-  },
+  mounted: function () {},
   methods: {
     fetchData() {
       this.listLoading = true;
-      fetchList(getPageParam(this.pagesize, this.currentPage)).then((response) => {
-        this.list = this.transMergedResult(response.data.results);
-        this.getSpanArr(this.list);
-        this.total = response.data.count;
-        this.listLoading = false;
-      });
+      fetchList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
+        (response) => {
+          this.list = this.transMergedResult(response.data.results);
+          this.getSpanArr(this.list);
+          this.total = response.data.count;
+          this.listLoading = false;
+        }
+      );
     },
     getSpanArr(data) {
-      let that = this
+      let that = this;
       //页面展示的数据，不一定是全部的数据，所以每次都清空之前存储的 保证遍历的数据是最新的数据。以免造成数据渲染混乱
-      that.spanArr = []
-      that.posForMerge = 0
+      that.spanArr = [];
+      that.posForMerge = 0;
       //遍历数据
       data.forEach((item, index) => {
         //判断是否是第一项
         if (index === 0) {
-          this.spanArr.push(1)
-          this.posForMerge = 0
+          this.spanArr.push(1);
+          this.posForMerge = 0;
         } else {
           //不是第一项时，就根据标识去存储
           if (data[index].orderId === data[index - 1].orderId) {
             // 查找到符合条件的数据时每次要把之前存储的数据+1
-            this.spanArr[this.posForMerge] += 1
-            this.spanArr.push(0)
+            this.spanArr[this.posForMerge] += 1;
+            this.spanArr.push(0);
           } else {
             // 没有符合的数据时，要记住当前的index
-            this.spanArr.push(1)
-            this.posForMerge = index
+            this.spanArr.push(1);
+            this.posForMerge = index;
           }
         }
-      })
-      console.log(this.spanArr, this.posForMerge)
+      });
     },
     // 列表方法
-    objectSpanMethod({row, column, rowIndex, columnIndex}) {
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       // 页面列表上 表格合并行 -> 第几列(从0开始)
       // 需要合并多个单元格时 依次增加判断条件即可
       if (this.mergedColumnLabels.indexOf(column.label) != -1) {
         // 二维数组存储的数据 取出
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
         return {
           rowspan: _row,
-          colspan: _col
-        }
+          colspan: _col,
+        };
         //不可以return {rowspan：0， colspan: 0} 会造成数据不渲染， 也可以不写else，eslint过不了的话就返回false
       } else {
-        return false
+        return false;
       }
     },
-    transMergedResult(results){
+    transMergedResult(results) {
       var orderDetailsResult = [];
-      (results || []).forEach(result => {
-        var orderDetails = result['order_detail'] || [];
-        if (orderDetails.length > 0){
-          orderDetails.forEach(detail => {
+      (results || []).forEach((result) => {
+        var orderDetails = result["order_detail"] || [];
+        if (orderDetails.length > 0) {
+          orderDetails.forEach((detail) => {
             detail.orderId = result.id;
             detail.orderAddress = result.address;
             detail.orderCustomerName = result.name;
-            detail.orderDate = result['order_date'];
-            detail.orderIssuedAll = result['issued_all'];
+            detail.orderDate = result["order_date"];
+            detail.orderIssuedAll = result["issued_all"];
             detail.orderCustomerPhone = result.phone;
-          })
+          });
 
           orderDetailsResult.push(...orderDetails);
         }
-      })
+      });
 
-      console.log(orderDetailsResult);
       return orderDetailsResult;
     },
     handleSizeChange(val) {
       this.pagesize = val;
-            this.fetchData();
+      this.fetchData();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-            this.fetchData();
+      this.fetchData();
     },
     clickEditFn(item) {
       this.addUpdateMode = "edit";
-      this.currentEditOrder = {};
-      this.currentEditOrder.orderId = item.orderId;
+      this.currentEditOrder = {orderId: item.orderId};
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      console.log(item);
       deleteOrder(item.orderId).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -339,19 +346,21 @@ export default {
       );
     },
     clickAddFn() {
-      console.log("add");
       this.addUpdateMode = "new";
       this.currentEditOrder = {
         name: "",
         phone: "",
         address: "",
+        order_date: new Date(),
+        order_detail: []
       };
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
+      if(!this.$refs.orderRef.dlgSave()) return;
+
       saveOrder(this.currentEditOrder).then(
         (res) => {
-          console.log(res);
           this.addupdateFormVisible = false;
           this.fetchData();
         },
@@ -363,8 +372,8 @@ export default {
           });
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

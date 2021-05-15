@@ -4,6 +4,7 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import './btn.scss';
+@import './el-dialog.fix.scss';
 
 body {
   height: 100%;
@@ -233,3 +234,34 @@ code {
   font-size: 22px;
   font-weight: bold;
 }
+
+.light-bg-hr{
+  height: 1px;
+  background-color: #ebeef5;
+  border: none;
+}
+
+.form-title{
+  border-bottom: 1px solid #ebeef5;
+  padding-bottom: 8px;
+}
+
+.required-star>label::after{
+  content: '*';
+  color: #e94444;
+}
+
+.el-table.required-star::after{
+  content: '*';
+  color: #e94444;
+}
+
+.value-required{
+  border: 1px solid red;
+  border-radius: 5px;
+}
+
+.value-required.el-table{
+  border: 1px solid red;
+}
+

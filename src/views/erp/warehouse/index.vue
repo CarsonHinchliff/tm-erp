@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container flex-container" >
+  <div class="app-container flex-container">
     <div v-mouse-enter-trigger="fetchData">
       <el-form class="form-container">
         <el-row>
@@ -108,11 +108,11 @@
       >
       </el-pagination>
     </div>
-    <el-dialog :visible.sync="addupdateFormVisible" v-mouse-enter-trigger="clickSaveFn">
+    <el-dialog :visible.sync="addupdateFormVisible">
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <customerAddUpdate :customer="currentEditCustomer" ref="detailRef"></customerAddUpdate>
+      <customerAddUpdate :customer="currentEditCustomer"></customerAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -177,7 +177,7 @@ export default {
     },
     clickEditFn(item) {
       this.addUpdateMode = "edit";
-      this.currentEditCustomer = {id: item.id};
+      this.currentEditCustomer = item;
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
@@ -205,8 +205,6 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
-      if(!this.$refs.detailRef.dlgSave()) return;
-
       saveCustomer(this.currentEditCustomer).then(
         (res) => {
           this.addupdateFormVisible = false;
