@@ -126,7 +126,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <inventoryAddUpdate :inventory="currentEditInventory" ref="detailRef"></inventoryAddUpdate>
+      <inventoryAddUpdate :inventory-id="currentEditInventory.id" ref="detailRef" :key="detailRefKey"></inventoryAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -145,6 +145,7 @@ export default {
   components: { inventoryAddUpdate },
   data() {
     return {
+      detailRefKey: "",
       filter: { date: "", number: "", color: "" },
       list: null,
       currentPage: 1,
@@ -154,9 +155,14 @@ export default {
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
-      currentEditInventory: null,
+      currentEditInventory: {},
       gridPageArray: gridPageArray,
     };
+  },
+  watch: {
+      currentEditInventory :function(){
+          this.detailRefKey = new Date().getTime();
+      }
   },
   created() {
     this.fetchData();
@@ -221,7 +227,7 @@ export default {
     clickSaveFn() {
       if(!this.$refs.detailRef.dlgSave()) return;
 
-      saveInventory(this.currentEditInventory).then(
+      saveInventory(this.$refs.detailRef.inventory).then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();

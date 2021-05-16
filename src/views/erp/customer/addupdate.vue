@@ -60,25 +60,19 @@ import { getCustomer } from '@/api/erp/customer';
 export default {
   name: "customerAddUpdate",
   props: {
-    customer: {
+    customerId: {
       required: true,
     },
   },
   data() {
     return {
       isSaveTriggered: false,
+      customer: {}
     };
   },
   created() {
+    this.customer.id = this.customerId
     this.fetchData(this.customer.id);
-  },
-  watch: {
-    customer: function (newVal, oldVal) {
-      this.isSaveTriggered = false;
-      if (newVal) {
-        this.fetchData(newVal.id);
-      }
-    },
   },
   methods: {
     fetchData(customerId) {
@@ -86,8 +80,7 @@ export default {
 
       getCustomer(customerId).then((res) => {
         this.listLoading = true;
-        Object.assign(this.customer, res.data);
-        this.$forceUpdate();
+        this.customer = Object.assign({}, this.customer, res.data);
         this.listLoading = false;
       });
     },

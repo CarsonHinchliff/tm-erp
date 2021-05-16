@@ -137,7 +137,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <incomeAddUpdate :income="currentEditIncome" ref="detailRef"></incomeAddUpdate>
+      <incomeAddUpdate :income-id="currentEditIncome.id" ref="detailRef" :key="detailRefKey"></incomeAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -156,6 +156,7 @@ export default {
   components: { incomeAddUpdate },
   data() {
     return {
+      detailRefKey: "",
       filter: { date: "", num: "", color: "" },
       list: null,
       currentPage: 1,
@@ -165,10 +166,15 @@ export default {
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
-      currentEditIncome: null,
+      currentEditIncome: {},
       gridPageArray: gridPageArray,
     };
   },
+  watch: {
+      currentEditIncome :function(){
+          this.detailRefKey = new Date().getTime();
+      }
+   },
   created() {
     this.fetchData();
   },
@@ -223,9 +229,6 @@ export default {
     clickAddFn() {
       this.addUpdateMode = "new";
       this.currentEditIncome = {
-        name: "",
-        phone: "",
-        address: "",
         date: new Date()
       };
       this.addupdateFormVisible = true;
@@ -233,7 +236,7 @@ export default {
     clickSaveFn() {
       if(!this.$refs.detailRef.dlgSave()) return;
 
-      saveIncome(this.currentEditIncome).then(
+      saveIncome(this.$refs.detailRef.income).then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();

@@ -112,7 +112,7 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <customerAddUpdate :customer="currentEditCustomer" ref="detailRef"></customerAddUpdate>
+      <customerAddUpdate :customer-id="currentEditCustomer.id" ref="detailRef" :key="detailRefKey"></customerAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -131,6 +131,7 @@ export default {
   components: { customerAddUpdate },
   data() {
     return {
+      detailRefKey: "",
       filter: { name: "", address: "", phone: "" },
       list: null,
       currentPage: 1,
@@ -140,13 +141,18 @@ export default {
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
-      currentEditCustomer: null,
+      currentEditCustomer: {},
       gridPageArray: gridPageArray,
     };
   },
   created() {
     this.fetchData();
   },
+  watch: {
+      currentEditCustomer :function(){
+          this.detailRefKey = new Date().getTime();
+      }
+   },
   computed: {
     addUpdateTitle: function () {
       return (
@@ -197,17 +203,13 @@ export default {
     },
     clickAddFn() {
       this.addUpdateMode = "new";
-      this.currentEditCustomer = {
-        name: "",
-        phone: "",
-        address: "",
-      };
+      this.currentEditCustomer = {};
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
       if(!this.$refs.detailRef.dlgSave()) return;
 
-      saveCustomer(this.currentEditCustomer).then(
+      saveCustomer(this.$refs.detailRef.customer).then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();

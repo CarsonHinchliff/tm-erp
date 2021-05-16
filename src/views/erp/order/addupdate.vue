@@ -9,11 +9,11 @@
             class="postInfo-container-item"
           >
             <el-input
-              disabled
               v-model="order.order_num"
+              disabled
               placeholder="请输入订单号"
               clearable
-            ></el-input>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -28,12 +28,11 @@
               :class="{
                 'value-required': !order.order_date && isSaveTriggered,
               }"
-              class="full-width"
               v-model="order.order_date"
+              class="full-width"
               type="date"
               placeholder="订单日期"
-            >
-            </el-date-picker>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -48,8 +47,7 @@
               v-model="order.issued_all"
               active-color="#13ce66"
               inactive-color="#ff4949"
-            >
-            </el-switch>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -65,7 +63,7 @@
               v-model="order.name"
               placeholder="请输入客户姓名"
               clearable
-            ></el-input>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -81,7 +79,7 @@
               v-model="order.phone"
               placeholder="请输入客户电话"
               clearable
-            ></el-input>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -97,11 +95,11 @@
               v-model="order.address"
               placeholder="请输入地址"
               clearable
-            ></el-input>
+            />
           </el-form-item>
         </el-col>
       </el-row>
-      <div><hr class="light-bg-hr" /></div>
+      <div><hr class="light-bg-hr" ></div>
       <el-row>
         <el-col>
           <el-form-item
@@ -110,18 +108,21 @@
             class="postInfo-container-item fr"
             style="margin-bottom: 2px"
           >
-            <el-button @click="clickAddFn" type="success" class=""
-              ><span
-                ><i class="el-icon-circle-plus"></i
-                ><span class="icon-name">新增</span></span
-              ></el-button
+            <el-button
+              type="success"
+              class=""
+              @click="clickAddFn"
+            ><span
+            ><i class="el-icon-circle-plus"/><span class="icon-name">新增</span></span
+            ></el-button
             >
           </el-form-item>
         </el-col>
       </el-row>
-      <div><hr class="light-bg-hr" /></div>
+      <div><hr class="light-bg-hr" ></div>
       <el-row>
         <el-table
+          v-loading="listLoading"
           ref="orderDetailTableRef"
           :class="{
             'value-required':
@@ -129,9 +130,8 @@
               order.order_detail.length == 0 &&
               isSaveTriggered,
           }"
-          height="250"
-          v-loading="listLoading"
           :data="order.order_detail"
+          height="250"
           row-key="id"
           element-loading-text="拼命加载中"
           border
@@ -142,8 +142,7 @@
             width="auto"
             align="center"
             type="index"
-          >
-          </el-table-column>
+          />
           <el-table-column label="款号" width="auto" align="center">
             <template slot-scope="scope">
               {{ scope.row.clothe_num }}
@@ -168,15 +167,13 @@
             <template slot-scope="scope">
               <div class="el-row">
                 <el-button
-                  @click="clickEditFn(scope.row)"
                   class="el-button el-button--primary el-button--mini is-plain is-circle"
-                  ><i class="el-icon-edit"></i
-                ></el-button>
+                  @click="clickEditFn(scope.row)"
+                ><i class="el-icon-edit"/></el-button>
                 <el-button
-                  @click="clickDeleteFn(scope.row)"
                   class="el-button el-button--danger el-button--mini is-plain is-circle"
-                  ><i class="el-icon-delete"></i
-                ></el-button>
+                  @click="clickDeleteFn(scope.row)"
+                ><i class="el-icon-delete"/></el-button>
               </div>
             </template>
           </el-table-column>
@@ -185,14 +182,14 @@
     </el-form>
     <el-dialog :visible.sync="addupdateFormVisible" append-to-body>
       <template slot="title">
-        <div class="form-title">编辑订单明细<span></span></div>
+        <div class="form-title">编辑订单明细<span/></div>
       </template>
       <orderDetailAddUpdate
         ref="orderDetailRef"
         :detail="currentEditOrderDetail"
-      ></orderDetailAddUpdate>
+      />
       <div slot="footer" class="dialog-footer">
-        <div><hr class="light-bg-hr" /></div>
+        <div><hr class="light-bg-hr" ></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="clickSaveFn">确 定</el-button>
       </div>
@@ -201,104 +198,98 @@
 </template>
 
 <script>
-import { getOrder } from "@/api/erp/order";
-import orderDetailAddUpdate from "./addupdate.orderdetail";
+import { getOrder } from '@/api/erp/order'
+import orderDetailAddUpdate from './addupdate.orderdetail'
 export default {
-  name: "orderAddUpdate",
+  name: 'OrderAddUpdate',
   components: { orderDetailAddUpdate },
   props: {
-    order: {
-      required: true,
-    },
+    orderId: {
+      required: true
+    }
   },
   data() {
     return {
       listLoading: false,
-      addUpdateMode: "",
+      addUpdateMode: '',
       addupdateFormVisible: false,
       currentEditOrderDetail: {},
       isSaveTriggered: false,
-    };
+      order: {order_date: new Date()}
+    }
   },
   created() {
-    this.fetchData(this.order.orderId);
+    this.order.orderId = this.orderId
+    this.fetchData(this.order.orderId)
   },
-  watch: {
-    order(newVal, oldVal) {
-      if (newVal && newVal != oldVal) {
-        this.isSaveTriggered = false;
-        this.fetchData(newVal.orderId);
-      }
-    },
+  beforeDestroy() {
+    console.log('destroyed...');
   },
   mounted() {
-    this.ensureOrderEntity();
+    this.ensureOrderEntity()
   },
   methods: {
     ensureOrderEntity() {
       if (!this.order.order_detail) {
-        this.order.order_detail = [];
+        this.order.order_detail = []
       }
     },
     fetchData(orderId) {
-      if (!orderId) return;
+      if (!orderId) return
 
       getOrder(orderId).then((res) => {
-        this.listLoading = true;
-        Object.assign(this.order, res.data);
-        this.$forceUpdate();
-        this.listLoading = false;
-      });
+        this.listLoading = true
+        this.order = Object.assign({}, this.order, res.data);
+        this.listLoading = false
+      })
     },
     clickEditFn(item) {
-      this.addUpdateMode = "edit";
-      this.currentEditOrderDetail = item;
-      this.addupdateFormVisible = true;
+      this.addUpdateMode = 'edit'
+      this.currentEditOrderDetail = item
+      this.addupdateFormVisible = true
     },
     clickDeleteFn(item) {
-      var array = this.order.order_detail || [];
-      array.splice(array.indexOf(item), 1);
+      var array = this.order.order_detail || []
+      array.splice(array.indexOf(item), 1)
     },
     clickAddFn() {
-      this.addUpdateMode = "new";
+      this.addUpdateMode = 'new'
       this.currentEditOrderDetail = {
-        clothe_num: "",
+        clothe_num: '',
         amount: 0,
-        color: "",
-        price: 0,
-      };
-      this.addupdateFormVisible = true;
+        color: '',
+        price: 0
+      }
+      this.addupdateFormVisible = true
     },
     clickSaveFn() {
       if (!this.$refs.orderDetailRef.dlgSave()) {
-        return;
+        return
       }
 
       if (this.order.order_detail.indexOf(this.currentEditOrderDetail) == -1) {
-        this.order.order_detail.push(this.currentEditOrderDetail);
+        this.order.order_detail.push(this.currentEditOrderDetail)
       }
-      this.addupdateFormVisible = false;
+      this.addupdateFormVisible = false
     },
     dlgSave() {
-      this.isSaveTriggered = true;
+      this.isSaveTriggered = true
       var isAllRequiredFieldFilled = true;
-      (this.$el.querySelectorAll(".required-star input") || []).forEach(
+      (this.$el.querySelectorAll('.required-star input') || []).forEach(
         (element) => {
-          if (element.value == "") {
-            isAllRequiredFieldFilled = false;
+          if (element.value == '') {
+            isAllRequiredFieldFilled = false
           }
         }
-      );
+      )
 
-      var tableRef = this.$refs.orderDetailTableRef;
-      var isAnyDetailRecord = tableRef.data.length > 0;
+      var tableRef = this.$refs.orderDetailTableRef
+      var isAnyDetailRecord = tableRef.data.length > 0
 
-      this.$forceUpdate();
-
-      return isAllRequiredFieldFilled && isAnyDetailRecord;
-    },
-  },
-};
+      return isAllRequiredFieldFilled && isAnyDetailRecord
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -59,27 +59,21 @@ import { getInventory } from "@/api/erp/warehouse";
 export default {
   name: "inventoryAddUpdate",
   props: {
-    inventory: {
+    inventoryId: {
       required: true,
     },
   },
   data() {
     return {
+      inventory: {},
       isSaveTriggered: false,
     };
   },
   created() {
+    this.inventory.id = this.inventoryId;
     this.fetchData(this.inventory.id);
   },
-  watch: {
-    inventory: function (newVal, oldVal) {
-      if (newVal && newVal != oldVal) {
-        this.isSaveTriggered = false;
-        this.fetchData(newVal.id);
-      }
-    },
-  },
-methods: {
+  methods: {
     intNumber(property) {
       this.inventory[property] = this.limitIntNumber(this.inventory[property]);
     },
@@ -107,8 +101,7 @@ methods: {
 
       getInventory(inventoryId).then((res) => {
         this.listLoading = true;
-        Object.assign(this.inventory, res.data);
-        this.$forceUpdate();
+        this.inventory = Object.assign({}, this.inventory, res.data);
         this.listLoading = false;
       });
     },

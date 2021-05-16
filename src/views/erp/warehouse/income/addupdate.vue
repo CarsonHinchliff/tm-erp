@@ -97,25 +97,19 @@ import { getIncome } from "@/api/erp/warehouse";
 export default {
   name: "incomeAddUpdate",
   props: {
-    income: {
+    incomeId: {
       required: true,
     },
   },
   data() {
     return {
+      income: {},
       isSaveTriggered: false,
     };
   },
   created() {
+    this.income.id = this.incomeId;
     this.fetchData(this.income.id);
-  },
-  watch: {
-    income: function (newVal, oldVal) {
-      if (newVal && newVal != oldVal) {
-        this.isSaveTriggered = false;
-        this.fetchData(newVal.id);
-      }
-    },
   },
   methods: {
     intNumber(property) {
@@ -145,8 +139,7 @@ export default {
 
       getIncome(incomeId).then((res) => {
         this.listLoading = true;
-        Object.assign(this.income, res.data);
-        this.$forceUpdate();
+        this.income = Object.assign({}, this.income, res.data);
         this.listLoading = false;
       });
     },

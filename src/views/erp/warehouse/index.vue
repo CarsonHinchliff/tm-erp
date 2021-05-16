@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container flex-container">
+  <div class="app-container flex-container" >
     <div v-mouse-enter-trigger="fetchData">
       <el-form class="form-container">
         <el-row>
@@ -108,11 +108,11 @@
       >
       </el-pagination>
     </div>
-    <el-dialog :visible.sync="addupdateFormVisible">
+    <el-dialog :visible.sync="addupdateFormVisible" v-mouse-enter-trigger="clickSaveFn">
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
-      <customerAddUpdate :customer="currentEditCustomer"></customerAddUpdate>
+      <customerAddUpdate :customer-id="currentEditCustomer.id" ref="detailRef" :key="detailRefKey"></customerAddUpdate>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" /></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
@@ -131,6 +131,7 @@ export default {
   components: { customerAddUpdate },
   data() {
     return {
+      detailRefKey: "",
       filter: { name: "", address: "", phone: "" },
       list: null,
       currentPage: 1,
@@ -140,13 +141,18 @@ export default {
       autoWidth: true,
       addupdateFormVisible: false,
       addUpdateMode: "",
-      currentEditCustomer: null,
+      currentEditCustomer: {},
       gridPageArray: gridPageArray,
     };
   },
   created() {
     this.fetchData();
   },
+  watch: {
+      currentEditCustomer :function(){
+          this.detailRefKey = new Date().getTime();
+      }
+   },
   computed: {
     addUpdateTitle: function () {
       return (
@@ -177,7 +183,7 @@ export default {
     },
     clickEditFn(item) {
       this.addUpdateMode = "edit";
-      this.currentEditCustomer = item;
+      this.currentEditCustomer = {id: item.id};
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
@@ -197,15 +203,13 @@ export default {
     },
     clickAddFn() {
       this.addUpdateMode = "new";
-      this.currentEditCustomer = {
-        name: "",
-        phone: "",
-        address: "",
-      };
+      this.currentEditCustomer = {};
       this.addupdateFormVisible = true;
     },
     clickSaveFn() {
-      saveCustomer(this.currentEditCustomer).then(
+      if(!this.$refs.detailRef.dlgSave()) return;
+
+      saveCustomer(this.$refs.detailRef.customer).then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();
