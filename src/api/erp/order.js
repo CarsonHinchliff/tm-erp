@@ -29,4 +29,36 @@ export function deleteOrder(id) {
       method: 'delete'
     })
 }
+
+
+
+export function fetchIssuedList(query) {
+  return request({
+    url: '/api/sales/orders/issued/',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getIssued(id) {
+  return request({
+    url: '/api/sales/orders/issued/' + id + '/',
+    method: 'get'
+  })
+}
+
+export function saveIssued(data) {
+    return request({
+      url: '/api/sales/orders/issued/',
+      method: 'post',
+      data
+    })
+}
+
+export function deleteIsued(id) {
+    return request({
+      url: '/api/sales/orders/issued/' + id + '/',
+      method: 'delete'
+    })
+}
   

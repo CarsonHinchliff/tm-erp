@@ -212,9 +212,10 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      deleteIncome(item.id).then(
+      var deleteHandler = (cb) => deleteIncome(item.id).then(
         (res) => {
           this.addupdateFormVisible = false;
+          cb();
           this.fetchData();
         },
         (error) => {
@@ -225,6 +226,23 @@ export default {
           });
         }
       );
+      this.$confirm('此操作将删除该入库信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteHandler(() => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     clickAddFn() {
       this.addUpdateMode = "new";

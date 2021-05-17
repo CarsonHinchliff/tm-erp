@@ -187,7 +187,7 @@ export default {
       this.addupdateFormVisible = true;
     },
     clickDeleteFn(item) {
-      deleteCustomer(item.id).then(
+      var deleteHandler = (cb) => deleteCustomer(item.id).then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();
@@ -200,6 +200,23 @@ export default {
           });
         }
       );
+      this.$confirm('此操作将删除该订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteHandler(() => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     clickAddFn() {
       this.addUpdateMode = "new";

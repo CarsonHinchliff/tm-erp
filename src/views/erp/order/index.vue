@@ -148,7 +148,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="115" align="center">
+      <el-table-column label="操作" width="135" align="center">
         <template slot-scope="scope">
           <div class="el-row">
             <el-button
@@ -159,6 +159,10 @@
               class="el-button el-button--danger el-button--mini is-plain is-circle"
               @click="clickDeleteFn(scope.row)"
             ><i class="el-icon-delete"/></el-button>
+            <el-button
+              class="el-button el-button--info el-button--mini is-plain is-circle"
+              @click="clickIssuedFn(scope.row)"
+            ><i class="el-icon-document"/></el-button>
           </div>
         </template>
       </el-table-column>
@@ -184,19 +188,32 @@
         <el-button type="primary" @click="clickSaveFn">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="addupdateIssuedFormVisible">
+      <template slot="title">
+        <div class="form-title">{{ addUpdateIssuedTitle }}<span/></div>
+      </template>
+      <orderIssuedAddUpdate ref="orderIssuedRef" :order-id="currentEditIssued.orderId" :key="orderIssuedRefKey"/>
+      <div slot="footer" class="dialog-footer">
+        <div><hr class="light-bg-hr" ></div>
+        <el-button @click="addupdateIssuedFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="clickIssuedSaveFn">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, saveOrder, deleteOrder } from '@/api/erp/order'
+import { fetchList, saveOrder, deleteOrder, saveIssued } from '@/api/erp/order'
 import orderAddUpdate from './addupdate'
+import orderIssuedAddUpdate from './addupdate.issued'
 import { Message } from 'element-ui'
 import { gridPageArray, getPageParam } from '../common/grid.page'
 export default {
-  components: { orderAddUpdate },
+  components: { orderAddUpdate, orderIssuedAddUpdate },
   data() {
     return {
       orderRefKey: '',
+      orderIssuedRefKey: '',
       filter: {
         customer: '',
         phone: '',
@@ -212,8 +229,10 @@ export default {
       listLoading: true,
       autoWidth: true,
       addupdateFormVisible: false,
+      addupdateIssuedFormVisible: false,
       addUpdateMode: '',
       currentEditOrder: {},
+      currentEditIssued: {},
       mergedColumnLabels: [
         'ID',
         '订单日期',
@@ -234,6 +253,9 @@ export default {
           ? '新建'
           : '编辑') + '订单'
       )
+    },
+    addUpdateIssuedTitle: function(){
+      return '编辑发货';
     }
   },
   created() {
@@ -243,6 +265,9 @@ export default {
   watch: {
       currentEditOrder :function(){
           this.orderRefKey=new Date().getTime();
+      },
+      currentEditIssued: function(){
+          this.orderIssuedRefKey = new Date().getTime();
       }
    },
   methods: {
@@ -332,11 +357,17 @@ export default {
       this.currentEditOrder = { orderId: item.orderId }
       this.addupdateFormVisible = true
     },
+    clickIssuedFn(item) {
+      this.addUpdateMode = 'edit'
+      this.currentEditIssued = { orderId: item.orderId }
+      this.addupdateIssuedFormVisible = true
+    },
     clickDeleteFn(item) {
-      deleteOrder(item.orderId).then(
+      var deleteHandler = (cb) => deleteOrder(item.orderId).then(
         (res) => {
-          this.addupdateFormVisible = false
-          this.fetchData()
+          this.addupdateFormVisible = false;
+          cb();
+          this.fetchData();
         },
         (error) => {
           Message({
@@ -345,7 +376,24 @@ export default {
             duration: 5 * 1000
           })
         }
-      )
+      );
+      this.$confirm('此操作将删除该订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteHandler(() => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     clickAddFn() {
       this.addUpdateMode = 'new'
@@ -358,6 +406,23 @@ export default {
       saveOrder(this.$refs.orderRef.order).then(
         (res) => {
           this.addupdateFormVisible = false
+          this.fetchData()
+        },
+        (response) => {
+          Message({
+            message: error.message,
+            type: 'error',
+            duration: 5 * 1000
+          })
+        }
+      )
+    },
+    clickIssuedSaveFn() {
+      if (!this.$refs.orderIssuedRef.dlgSave()) return
+
+      saveIssued(this.$refs.orderIssuedRef.issued).then(
+        (res) => {
+          this.addupdateIssuedFormVisible = false
           this.fetchData()
         },
         (response) => {
