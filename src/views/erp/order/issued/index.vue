@@ -71,14 +71,7 @@
         ><i class="el-icon-search"/><span class="icon-name">查询</span></span
         ></el-button
         >
-        <span/>
-        <el-button
-          type="success"
-          @click="clickAddFn"
-        ><span
-        ><i class="el-icon-circle-plus"/><span class="icon-name">新增</span></span
-        ></el-button
-        >
+        <span/>      
       </div>
     </div>
     <div><hr class="light-bg-hr" ></div>
@@ -124,14 +117,14 @@
           {{ scope.row.amount }}
         </template>
       </el-table-column>
-      <el-table-column :width="minColumnWidth" label="单价" align="center">
+      <el-table-column :width="minColumnWidth" label="发货数量" align="center">
         <template slot-scope="scope">
-          {{ scope.row.price }}
+          {{ scope.row.issued_num }}
         </template>
       </el-table-column>
-      <el-table-column :width="minColumnWidth" label="总价" align="center">
+      <el-table-column :width="minColumnWidth" label="欠货数量" align="center">
         <template slot-scope="scope">
-          {{ scope.row["total_price"] }}
+          {{ scope.row["pending_num"] }}
         </template>
       </el-table-column>
       <el-table-column label="电话" width="115" align="center">
@@ -149,21 +142,27 @@
           />
         </template>
       </el-table-column>
+      <el-table-column label="部分发货">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.orderIssuedPartial"
+            disabled
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="205" align="center">
         <template slot-scope="scope">
           <div class="el-row">
             <el-button
               class="el-button el-button--primary el-button--mini is-plain operation-small-button"
-              @click="clickEditFn(scope.row)"
-            ><i class="el-icon-edit"/>编辑</el-button>
+              @click="clickIssuedFn(scope.row)"
+            ><i class="el-icon-document"/>发货</el-button>
             <el-button
               class="el-button el-button--danger el-button--mini is-plain operation-small-button"
               @click="clickDeleteFn(scope.row)"
             ><i class="el-icon-delete"/>删除</el-button>
-            <el-button
-              class="el-button el-button--info el-button--mini is-plain operation-small-button"
-              @click="clickIssuedFn(scope.row)"
-            ><i class="el-icon-document"/>发货</el-button>
           </div>
         </template>
       </el-table-column>
@@ -182,39 +181,26 @@
       <template slot="title">
         <div class="form-title">{{ addUpdateTitle }}<span/></div>
       </template>
-      <orderAddUpdate ref="orderRef" :order-id="currentEditOrder.orderId" :key="orderRefKey"/>
+      <issuedAddUpdate ref="issuedRef" :order-id="currentEditIssued.orderId" :key="issuedRefKey"/>
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" ></div>
         <el-button @click="addupdateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="clickSaveFn">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="addupdateIssuedFormVisible">
-      <template slot="title">
-        <div class="form-title">{{ addUpdateIssuedTitle }}<span/></div>
-      </template>
-      <orderIssuedAddUpdate ref="orderIssuedRef" :order-id="currentEditIssued.orderId" :key="orderIssuedRefKey"/>
-      <div slot="footer" class="dialog-footer">
-        <div><hr class="light-bg-hr" ></div>
-        <el-button @click="addupdateIssuedFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="clickIssuedSaveFn">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, saveOrder, putOrder, deleteOrder, saveIssued, putIssued } from '@/api/erp/order'
-import orderAddUpdate from '../addupdate'
-import orderIssuedAddUpdate from './addupdate'
+import { fetchIssuedList, deleteIssued, saveIssued, putIssued } from '@/api/erp/order'
+import issuedAddUpdate from './addupdate'
 import { Message } from 'element-ui'
 import { gridPageArray, getPageParam } from "@/views/erp/common/grid.page";
 export default {
-  components: { orderAddUpdate, orderIssuedAddUpdate },
+  components: { issuedAddUpdate },
   data() {
     return {
-      orderRefKey: '',
-      orderIssuedRefKey: '',
+      issuedRefKey: '',
       filter: {
         customer: '',
         phone: '',
@@ -230,9 +216,7 @@ export default {
       listLoading: true,
       autoWidth: true,
       addupdateFormVisible: false,
-      addupdateIssuedFormVisible: false,
       addUpdateMode: '',
-      currentEditOrder: {},
       currentEditIssued: {},
       mergedColumnLabels: [
         'ID',
@@ -249,35 +233,25 @@ export default {
   },
   computed: {
     addUpdateTitle: function() {
-      return (
-        (!!this.addUpdateMode && this.addUpdateMode == 'new'
-          ? '新建'
-          : '编辑') + '订单'
-      )
-    },
-    addUpdateIssuedTitle: function(){
       return '编辑发货';
-    }
+    },
   },
   created() {
     this.fetchData()
   },
   mounted: function() {},
   watch: {
-      currentEditOrder :function(){
-          this.orderRefKey=new Date().getTime();
-      },
-      currentEditIssued: function(){
-          this.orderIssuedRefKey = new Date().getTime();
+      currentEditIssued :function(){
+          this.issuedRefKey=new Date().getTime();
       }
    },
   methods: {
     rowdblClickFn(row, column){
-      this.clickEditFn(row);
+      this.clickIssuedFn(row);
     },
     fetchData() {
       this.listLoading = true
-      fetchList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
+      fetchIssuedList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
         (response) => {
           this.list = this.transMergedResult(response.data.results)
           this.getSpanArr(this.list)
@@ -338,7 +312,8 @@ export default {
             detail.orderAddress = result.address
             detail.orderCustomerName = result.name
             detail.orderDate = result['order_date']
-            detail.orderIssuedAll = result['issued_all']
+            detail.orderIssuedAll = result['issued_all'],
+            detail.orderIssuedPartial = result['issued_partial'],
             detail.orderCustomerPhone = result.phone
           })
 
@@ -356,18 +331,13 @@ export default {
       this.currentPage = val
       this.fetchData()
     },
-    clickEditFn(item) {
-      this.addUpdateMode = 'edit'
-      this.currentEditOrder = { orderId: item.orderId }
-      this.addupdateFormVisible = true
-    },
     clickIssuedFn(item) {
       this.addUpdateMode = 'edit'
       this.currentEditIssued = { orderId: item.orderId }
-      this.addupdateIssuedFormVisible = true
+      this.addupdateFormVisible = true
     },
     clickDeleteFn(item) {
-      var deleteHandler = (cb) => deleteOrder(item.orderId).then(
+      var deleteHandler = (cb) => deleteIssued(item.orderId).then(
         (res) => {
           this.addupdateFormVisible = false;
           cb();
@@ -381,7 +351,7 @@ export default {
           })
         }
       );
-      this.$confirm('此操作将删除该订单, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该发货信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -399,41 +369,19 @@ export default {
           });          
         });
     },
-    clickAddFn() {
-      this.addUpdateMode = 'new'
-      this.currentEditOrder = {}
-      this.addupdateFormVisible = true
-    },
     clickSaveFn() {
-      if (!this.$refs.orderRef.dlgSave()) return;
+      if (!this.$refs.issuedRef.dlgSave()) return;
 
-      var order = this.$refs.orderRef.order;
+      var issued = this.$refs.issuedRef.issued;
       var savePromise = this.addUpdateMode == 'edit' ?
-        putOrder(
-          order.orderId,
-          order) :
-        saveOrder(order);
+        putIssued(
+          issued.orderId,
+          issued) :
+        saveIssued(issued);
 
       savePromise.then(
         (res) => {
           this.addupdateFormVisible = false
-          this.fetchData()
-        },
-        (response) => {
-          Message({
-            message: error.message,
-            type: 'error',
-            duration: 5 * 1000
-          })
-        }
-      )
-    },
-    clickIssuedSaveFn() {
-      if (!this.$refs.orderIssuedRef.dlgSave()) return
-
-      saveIssued(this.$refs.orderIssuedRef.issued).then(
-        (res) => {
-          this.addupdateIssuedFormVisible = false
           this.fetchData()
         },
         (response) => {

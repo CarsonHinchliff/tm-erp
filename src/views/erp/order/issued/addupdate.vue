@@ -4,7 +4,7 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="65px"
+            label-width="85px"
             label="订单号:"
             class="postInfo-container-item required-star"
           >
@@ -20,11 +20,11 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="65px"
-            label="姓名:"
+            label-width="85px"
+            label="订单日期:"
             class="postInfo-container-item required-star"
           >
-            <el-input
+            <el-input disabled
               :class="{ 'value-required': !issued.order_date && isSaveTriggered }"
               v-model="issued.order_date"
               placeholder="请输入订单日期"
@@ -36,11 +36,11 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="65px"
+            label-width="85px"
             label="电话:"
             class="postInfo-container-item required-star"
           >
-            <el-input
+            <el-input disabled
               :class="{ 'value-required': !issued.name && isSaveTriggered }"
               v-model="issued.name"
               placeholder="请输入客户姓名"
@@ -52,11 +52,11 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="65px"
+            label-width="85px"
             label="地址:"
             class="postInfo-container-item required-star"
           >
-            <el-input
+            <el-input disabled
               :class="{
                 'value-required': !issued.address && isSaveTriggered,
               }"
@@ -126,7 +126,7 @@
               {{ scope.row.amount }}
             </template>
           </el-table-column>
-           <el-table-column label="发货" width="auto" align="center">
+           <el-table-column label="发货数量" width="auto" align="center">
             <template slot-scope="scope">
               {{ scope.row.order_header }}
             </template>

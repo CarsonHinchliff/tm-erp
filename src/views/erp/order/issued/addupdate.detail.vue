@@ -4,7 +4,7 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="55px"
+            label-width="85px"
             label="款号:"
             class="postInfo-container-item required-star"
           >
@@ -19,7 +19,7 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="55px"
+            label-width="85px"
             label="数量:"
             class="postInfo-container-item required-star"
           >
@@ -37,7 +37,7 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="55px"
+            label-width="85px"
             label="颜色:"
             class="postInfo-container-item required-star"
           >
@@ -52,8 +52,8 @@
       <el-row>
         <el-col>
           <el-form-item
-            label-width="55px"
-            label="单价:"
+            label-width="85px"
+            label="发货数量:"
             type="number"
             class="postInfo-container-item required-star"
           >

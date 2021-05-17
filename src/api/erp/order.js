@@ -71,7 +71,7 @@ export function putIssued(id, data) {
   })
 }
 
-export function deleteIsued(id) {
+export function deleteIssued(id) {
     return request({
       url: '/api/sales/orders/issued/' + id + '/',
       method: 'delete'
