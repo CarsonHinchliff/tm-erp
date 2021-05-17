@@ -11,6 +11,9 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const moment = require('moment')
+const version = "1." + moment(new Date()).format("YY.MM.DD.HH.mm.SS");
+console.log('version: ' + version);
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -55,7 +58,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
-      title: 'vue-element-admin',
+      title: 'tm-erp',
+      version: version,
       path: config.build.assetsPublicPath + config.build.assetsSubDirectory,
       minify: {
         removeComments: true,

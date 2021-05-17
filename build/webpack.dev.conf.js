@@ -13,8 +13,6 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-console.log(config.dev.proxyTable)
-
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -59,7 +57,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
-      title: 'vue-element-admin',
+      title: 'tm-erp',
+      version: '1.0',
       path: config.dev.assetsPublicPath + config.dev.assetsSubDirectory
     })
   ]

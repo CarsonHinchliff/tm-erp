@@ -120,6 +120,7 @@
           element-loading-text="拼命加载中"
           border
           fit
+          @row-dblclick="rowdblClickFn"
         >
           <el-table-column
             label="序号"
@@ -211,6 +212,9 @@ export default {
   methods: {
     checkPhone(phone){
       return isNullOrEmpty(phone) || checkPhoneFormat(phone);
+    },
+    rowdblClickFn(row, column){
+      this.clickEditFn(row);
     },
     fetchData(orderId) {
       if (!orderId) return;
