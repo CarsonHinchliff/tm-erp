@@ -1,1 +1,1 @@
-scp -r /Users/carson/Home/Projects/GitProjects/tm-erp/dist/ root@39.101.151.118:/usr/apps/tm_erp/
+scp -r /Users/carson/Home/Projects/GitProjects/tm-erp/dist/* root@39.101.151.118:/usr/apps/tm_erp/
