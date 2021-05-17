@@ -56,6 +56,7 @@
 
 <script>
 import { getInventory } from "@/api/erp/warehouse";
+import {INT_MAX } from "@/views/erp/common/int.max";
 export default {
   name: "inventoryAddUpdate",
   props: {
@@ -93,7 +94,7 @@ export default {
           .replace(/^(\d+)\.(\d\d).*$/, "$1")
           .replace(/\.$/, "");
         var valueNum = Number(value);
-        return valueNum >= 2147483647 ? 2147483647 : valueNum;
+        return valueNum >= INT_MAX ? INT_MAX : valueNum;
       }
     },
     fetchData(inventoryId) {

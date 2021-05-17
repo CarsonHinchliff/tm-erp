@@ -72,6 +72,7 @@
       element-loading-text="拼命加载中"
       border
       fit
+      @row-dblclick="rowdblClickFn"
       highlight-current-row
       style="height: 100%"
     >
@@ -148,10 +149,10 @@
 </template>
 
 <script>
-import { fetchIncomeList, saveIncome, deleteIncome } from "@/api/erp/warehouse";
+import { fetchIncomeList, saveIncome, putIncome, deleteIncome } from "@/api/erp/warehouse";
 import incomeAddUpdate from "./addupdate";
 import { Message } from "element-ui";
-import { gridPageArray, getPageParam } from "../../common/grid.page";
+import { gridPageArray, getPageParam } from "@/views/erp/common/grid.page";
 export default {
   components: { incomeAddUpdate },
   data() {
@@ -188,6 +189,9 @@ export default {
     },
   },
   methods: {
+    rowdblClickFn(row, column){
+      this.clickEditFn(row);
+    },
     fetchData() {
       this.listLoading = true;
       fetchIncomeList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
@@ -254,7 +258,14 @@ export default {
     clickSaveFn() {
       if(!this.$refs.detailRef.dlgSave()) return;
 
-      saveIncome(this.$refs.detailRef.income).then(
+      var income = this.$refs.detailRef.income;
+      var savePromise = this.addUpdateMode == 'edit' ?
+        putIncome(
+          income.id,
+          income) :
+        saveIncome(income);
+
+      savePromise.then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();

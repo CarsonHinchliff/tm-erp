@@ -9,7 +9,6 @@ var isEnterKey = function(key){
 export default {
     bind: function (el, binding, vnode) {
         el.onkeyup = function(e){
-            console.log(e);
             if(isEnterKey(e.key) && isFunction(binding.value)){
                 binding.value();
             }

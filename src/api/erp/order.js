@@ -23,6 +23,14 @@ export function saveOrder(data) {
     })
 }
 
+export function putOrder(id, data) {
+  return request({
+    url: '/api/sales/orders/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
 export function deleteOrder(id) {
     return request({
       url: '/api/sales/orders/' + id + '/',
@@ -53,6 +61,14 @@ export function saveIssued(data) {
       method: 'post',
       data
     })
+}
+
+export function putIssued(id, data) {
+  return request({
+    url: '/api/sales/orders/issued/' + id + '/',
+    method: 'put',
+    data
+  })
 }
 
 export function deleteIsued(id) {

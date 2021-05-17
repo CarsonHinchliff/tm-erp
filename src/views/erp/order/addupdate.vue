@@ -199,7 +199,7 @@
 
 <script>
 import { getOrder } from '@/api/erp/order'
-import orderDetailAddUpdate from './addupdate.orderdetail'
+import orderDetailAddUpdate from './addupdate.detail'
 export default {
   name: 'OrderAddUpdate',
   components: { orderDetailAddUpdate },
@@ -264,7 +264,7 @@ export default {
     },
     clickSaveFn() {
       if (!this.$refs.orderDetailRef.dlgSave()) {
-        return
+        return;
       }
 
       if (this.order.order_detail.indexOf(this.currentEditOrderDetail) == -1) {

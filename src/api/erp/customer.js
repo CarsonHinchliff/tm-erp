@@ -23,6 +23,14 @@ export function saveCustomer(data) {
     })
 }
 
+export function putCustomer(id, data) {
+  return request({
+    url: '/api/sales/customers/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
 export function deleteCustomer(id) {
     return request({
       url: '/api/sales/customers/' + id + '/',

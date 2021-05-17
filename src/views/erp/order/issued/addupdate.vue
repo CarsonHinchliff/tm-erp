@@ -1,101 +1,69 @@
 <template>
   <div>
     <el-form class="form-container">
-      <el-row v-if="!!order.orderId">
+      <el-row>
         <el-col>
           <el-form-item
-            label-width="85px"
+            label-width="65px"
             label="订单号:"
-            class="postInfo-container-item"
+            class="postInfo-container-item required-star"
           >
-            <el-input
-              v-model="order.order_num"
-              disabled
+            <el-input disabled
+              :class="{ 'value-required': !issued.order_num && isSaveTriggered }"
+              v-model="issued.order_num"
               placeholder="请输入订单号"
               clearable
-            />
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col>
           <el-form-item
-            label-width="85px"
-            label="订单日期:"
-            class="postInfo-container-item required-star"
-          >
-            <el-date-picker
-              :class="{
-                'value-required': !order.order_date && isSaveTriggered,
-              }"
-              v-model="order.order_date"
-              class="full-width"
-              type="date"
-              placeholder="订单日期"
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-form-item
-            label-width="85px"
-            label="已发货:"
-            class="postInfo-container-item"
-          >
-            <el-switch
-              v-model="order.issued_all"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-form-item
-            label-width="85px"
-            label="客户姓名:"
+            label-width="65px"
+            label="姓名:"
             class="postInfo-container-item required-star"
           >
             <el-input
-              :class="{ 'value-required': !order.name && isSaveTriggered }"
-              v-model="order.name"
+              :class="{ 'value-required': !issued.order_date && isSaveTriggered }"
+              v-model="issued.order_date"
+              placeholder="请输入订单日期"
+              clearable
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item
+            label-width="65px"
+            label="电话:"
+            class="postInfo-container-item required-star"
+          >
+            <el-input
+              :class="{ 'value-required': !issued.name && isSaveTriggered }"
+              v-model="issued.name"
               placeholder="请输入客户姓名"
               clearable
-            />
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col>
           <el-form-item
-            label-width="85px"
-            label="客户电话:"
+            label-width="65px"
+            label="地址:"
             class="postInfo-container-item required-star"
           >
             <el-input
-              :class="{ 'value-required': !order.phone && isSaveTriggered }"
-              v-model="order.phone"
-              placeholder="请输入客户电话"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-form-item
-            label-width="85px"
-            label="客户地址:"
-            class="postInfo-container-item required-star"
-          >
-            <el-input
-              :class="{ 'value-required': !order.address && isSaveTriggered }"
-              v-model="order.address"
+              :class="{
+                'value-required': !issued.address && isSaveTriggered,
+              }"
+              v-model="issued.address"
               placeholder="请输入地址"
               clearable
-            />
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -126,11 +94,11 @@
           ref="orderDetailTableRef"
           :class="{
             'value-required':
-              order.order_detail &&
-              order.order_detail.length == 0 &&
+              issued.order_detail &&
+              issued.order_detail.length == 0 &&
               isSaveTriggered,
           }"
-          :data="order.order_detail"
+          :data="issued.order_detail"
           height="250"
           row-key="id"
           element-loading-text="拼命加载中"
@@ -152,15 +120,15 @@
             <template slot-scope="scope">
               {{ scope.row.color }}
             </template>
-          </el-table-column>
-          <el-table-column label="单价" width="auto" align="center">
-            <template slot-scope="scope">
-              {{ scope.row.price }}
-            </template>
-          </el-table-column>
+          </el-table-column>         
           <el-table-column label="数量" width="auto" align="center">
             <template slot-scope="scope">
               {{ scope.row.amount }}
+            </template>
+          </el-table-column>
+           <el-table-column label="发货" width="auto" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.order_header }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="135" align="center">
@@ -182,11 +150,11 @@
     </el-form>
     <el-dialog :visible.sync="addupdateFormVisible" append-to-body>
       <template slot="title">
-        <div class="form-title">编辑订单明细<span/></div>
+        <div class="form-title">编辑发货明细<span/></div>
       </template>
-      <orderDetailAddUpdate
-        ref="orderDetailRef"
-        :detail="currentEditOrderDetail"
+      <issuedDetailAddUpdate
+        ref="issuedDetailRef"
+        :detail="currentEditIssuedDetail"
       />
       <div slot="footer" class="dialog-footer">
         <div><hr class="light-bg-hr" ></div>
@@ -198,77 +166,61 @@
 </template>
 
 <script>
-import { getOrder } from '@/api/erp/order'
-import orderDetailAddUpdate from './addupdate.orderdetail'
+import { getIssued } from '@/api/erp/order';
+import issuedDetailAddUpdate from './addupdate.detail';
 export default {
-  name: 'OrderAddUpdate',
-  components: { orderDetailAddUpdate },
+  name: "orderIssueAddUpdate",
+  components: { issuedDetailAddUpdate },
   props: {
     orderId: {
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       listLoading: false,
       addUpdateMode: '',
       addupdateFormVisible: false,
-      currentEditOrderDetail: {},
+      currentEditIssuedDetail: {},
       isSaveTriggered: false,
-      order: {order_date: new Date()}
-    }
+      issued: {}
+    };
   },
   created() {
-    this.order.orderId = this.orderId
-    this.fetchData(this.order.orderId)
-  },
-  beforeDestroy() {
-    console.log('destroyed...');
-  },
-  mounted() {
-    this.ensureOrderEntity()
+    this.issued.id = this.orderId
+    this.fetchData(this.issued.id);
   },
   methods: {
-    ensureOrderEntity() {
-      if (!this.order.order_detail) {
-        this.order.order_detail = []
-      }
-    },
     fetchData(orderId) {
-      if (!orderId) return
+      if (!orderId) return;
 
-      getOrder(orderId).then((res) => {
-        this.listLoading = true
-        this.order = Object.assign({}, this.order, res.data);
-        this.listLoading = false
-      })
+      getIssued(orderId).then((res) => {
+        this.listLoading = true;
+        this.issued = Object.assign({}, this.issued, res.data);
+        this.listLoading = false;
+      });
     },
     clickEditFn(item) {
       this.addUpdateMode = 'edit'
-      this.currentEditOrderDetail = item
+      this.currentEditIssuedDetail = item
       this.addupdateFormVisible = true
     },
     clickDeleteFn(item) {
-      var array = this.order.order_detail || []
+      var array = this.issued.order_detail || []
       array.splice(array.indexOf(item), 1)
     },
     clickAddFn() {
       this.addUpdateMode = 'new'
-      this.currentEditOrderDetail = {
-        clothe_num: '',
-        amount: 0,
-        color: '',
-        price: 0
-      }
+      this.currentEditIssuedDetail = {}
       this.addupdateFormVisible = true
     },
     clickSaveFn() {
-      if (!this.$refs.orderDetailRef.dlgSave()) {
+      if (!this.$refs.issuedDetailRef.dlgSave()) {
         return
       }
 
-      if (this.order.order_detail.indexOf(this.currentEditOrderDetail) == -1) {
-        this.order.order_detail.push(this.currentEditOrderDetail)
+      if (this.issued.order_detail.indexOf(this.currentEditIssuedDetail) == -1) {
+        this.issued.order_detail.push(this.currentEditIssuedDetail)
       }
       this.addupdateFormVisible = false
     },
@@ -289,7 +241,7 @@ export default {
       return isAllRequiredFieldFilled && isAnyDetailRecord
     }
   }
-}
+};
 </script>
 
 <style scoped>

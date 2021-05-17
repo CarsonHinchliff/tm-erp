@@ -71,6 +71,7 @@
       element-loading-text="拼命加载中"
       border
       fit
+      @row-dblclick="rowdblClickFn"
       highlight-current-row
       style="height: 100%"
     >
@@ -137,10 +138,10 @@
 </template>
 
 <script>
-import { fetchInventoryList, saveInventory, deleteInventory } from "@/api/erp/warehouse";
+import { fetchInventoryList, saveInventory, putInventory, deleteInventory } from "@/api/erp/warehouse";
 import inventoryAddUpdate from "./addupdate";
 import { Message } from "element-ui";
-import { gridPageArray, getPageParam } from "../../common/grid.page";
+import { gridPageArray, getPageParam } from "@/views/erp/common/grid.page";
 export default {
   components: { inventoryAddUpdate },
   data() {
@@ -177,6 +178,9 @@ export default {
     },
   },
   methods: {
+    rowdblClickFn(row, column){
+      this.clickEditFn(row);
+    },
     fetchData() {
       this.listLoading = true;
       fetchInventoryList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
@@ -245,7 +249,14 @@ export default {
     clickSaveFn() {
       if(!this.$refs.detailRef.dlgSave()) return;
 
-      saveInventory(this.$refs.detailRef.inventory).then(
+      var inventory = this.$refs.detailRef.inventory;
+      var savePromise = this.addUpdateMode == 'edit' ?
+        putInventory(
+          inventory.id,
+          inventory) :
+        saveInventory(inventory);
+
+      savePromise.then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();

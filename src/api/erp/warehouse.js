@@ -22,6 +22,14 @@ export function saveIncome(data) {
     })
 }
 
+export function putIncome(id, data) {
+  return request({
+    url: '/api/warehouse/income/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
 export function deleteIncome(id) {
     return request({
       url: '/api/warehouse/income/' + id + '/',
@@ -51,6 +59,14 @@ export function saveInventory(data) {
       method: 'post',
       data
     })
+}
+
+export function putInventory(id, data) {
+  return request({
+    url: '/api/warehouse/inventory/' + id + '/',
+    method: 'put',
+    data
+  })
 }
 
 export function deleteInventory(id) {

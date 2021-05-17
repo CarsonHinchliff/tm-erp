@@ -91,6 +91,7 @@
       element-loading-text="拼命加载中"
       border
       fit
+      @row-dblclick="rowdblClickFn"
       highlight-current-row
     >
       <el-table-column align="center" label="ID" width="95">
@@ -203,11 +204,11 @@
 </template>
 
 <script>
-import { fetchList, saveOrder, deleteOrder, saveIssued } from '@/api/erp/order'
-import orderAddUpdate from './addupdate'
-import orderIssuedAddUpdate from './addupdate.issued'
+import { fetchList, saveOrder, putOrder, deleteOrder, saveIssued, putIssued } from '@/api/erp/order'
+import orderAddUpdate from '../addupdate'
+import orderIssuedAddUpdate from './addupdate'
 import { Message } from 'element-ui'
-import { gridPageArray, getPageParam } from '../../common/grid.page'
+import { gridPageArray, getPageParam } from "@/views/erp/common/grid.page";
 export default {
   components: { orderAddUpdate, orderIssuedAddUpdate },
   data() {
@@ -271,6 +272,9 @@ export default {
       }
    },
   methods: {
+    rowdblClickFn(row, column){
+      this.clickEditFn(row);
+    },
     fetchData() {
       this.listLoading = true
       fetchList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
@@ -401,9 +405,16 @@ export default {
       this.addupdateFormVisible = true
     },
     clickSaveFn() {
-      if (!this.$refs.orderRef.dlgSave()) return
+      if (!this.$refs.orderRef.dlgSave()) return;
 
-      saveOrder(this.$refs.orderRef.order).then(
+      var order = this.$refs.orderRef.order;
+      var savePromise = this.addUpdateMode == 'edit' ?
+        putOrder(
+          order.orderId,
+          order) :
+        saveOrder(order);
+
+      savePromise.then(
         (res) => {
           this.addupdateFormVisible = false
           this.fetchData()

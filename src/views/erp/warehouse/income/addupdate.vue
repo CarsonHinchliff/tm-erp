@@ -30,6 +30,9 @@
               :class="{ 'value-required': !income.bag_num && isSaveTriggered }"
               v-model="income.bag_num"
               placeholder="请输入包号"
+              type="number"
+              @keyup.native="intNumber('bag_num')"
+              @change.native="intNumber('bag_num')"
               clearable
             ></el-input>
           </el-form-item>
@@ -94,6 +97,7 @@
 
 <script>
 import { getIncome } from "@/api/erp/warehouse";
+import { INT_MAX } from "@/views/erp/common/int.max";
 export default {
   name: "incomeAddUpdate",
   props: {
@@ -131,7 +135,7 @@ export default {
           .replace(/^(\d+)\.(\d\d).*$/, "$1")
           .replace(/\.$/, "");
         var valueNum = Number(value);
-        return valueNum >= 2147483647 ? 2147483647 : valueNum;
+        return valueNum >= INT_MAX ? INT_MAX : valueNum;
       }
     },
     fetchData(incomeId) {

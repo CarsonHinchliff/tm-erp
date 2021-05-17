@@ -57,6 +57,7 @@
       element-loading-text="拼命加载中"
       border
       fit
+      @row-dblclick="rowdblClickFn"
       highlight-current-row
       style="height: 100%"
     >
@@ -123,10 +124,10 @@
 </template>
 
 <script>
-import { fetchList, saveCustomer, deleteCustomer } from "@/api/erp/customer";
+import { fetchList, saveCustomer, putCustomer, deleteCustomer } from "@/api/erp/customer";
 import customerAddUpdate from "./addupdate";
 import { Message } from "element-ui";
-import { gridPageArray, getPageParam } from "../common/grid.page";
+import { gridPageArray, getPageParam } from "@/views/erp/common/grid.page";
 export default {
   components: { customerAddUpdate },
   data() {
@@ -163,6 +164,9 @@ export default {
     },
   },
   methods: {
+    rowdblClickFn(row, column){
+      this.clickEditFn(row);
+    },
     fetchData() {
       this.listLoading = true;
       fetchList(getPageParam(this.pagesize, this.currentPage, this.filter)).then(
@@ -227,7 +231,14 @@ export default {
     clickSaveFn() {
       if(!this.$refs.detailRef.dlgSave()) return;
 
-      saveCustomer(this.$refs.detailRef.customer).then(
+      var customer = this.$refs.detailRef.customer;
+      var savePromise = this.addUpdateMode == 'edit' ?
+        putCustomer(
+          customer.id, 
+          customer) : 
+          saveCustomer(customer);
+
+      savePromise.then(
         (res) => {
           this.addupdateFormVisible = false;
           this.fetchData();
