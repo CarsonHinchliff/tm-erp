@@ -60,6 +60,7 @@
             <el-input :class="{'value-required': !detail.order_header && detail.order_header != 0 && isSaveTriggered}"
               v-model="detail.order_header"
               placeholder="请输入发货数量"
+              type="number"
               @keyup.native="intNumber('order_header')"
               @change.native="intNumber('order_header')"
               clearable

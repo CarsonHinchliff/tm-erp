@@ -60,6 +60,7 @@
             <el-input :class="{'value-required': !detail.price && detail.price != 0 && isSaveTriggered}"
               v-model="detail.price"
               placeholder="请输入单价"
+              type="number"
               @keyup.native="intNumber('price')"
               @change.native="intNumber('price')"
               clearable
