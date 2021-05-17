@@ -104,7 +104,7 @@
             content="点击以编辑发货详情"
             :open-delay="0"
             effect="dark">
-              <div class="bold blue-color underline-blue"
+              <div class="bold blue-color underline-blue cursor-pointer"
                 @click="clickIssuedFn(scope.row)"
                 >{{ scope.row.orderNum }}
               </div>
