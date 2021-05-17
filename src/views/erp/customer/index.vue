@@ -80,18 +80,18 @@
           {{ scope.row.address }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="115" align="center">
+      <el-table-column label="操作" width="135" align="center">
         <template slot-scope="scope">
           <div class="el-row">
             <el-button
               @click="clickEditFn(scope.row)"
-              class="el-button el-button--primary el-button--mini is-plain is-circle"
-              ><i class="el-icon-edit"></i
+              class="el-button el-button--primary el-button--mini is-plain operation-small-button"
+              ><i class="el-icon-edit">编辑</i
             ></el-button>
             <el-button
               @click="clickDeleteFn(scope.row)"
-              class="el-button el-button--danger el-button--mini is-plain is-circle"
-              ><i class="el-icon-delete"></i
+              class="el-button el-button--danger el-button--mini is-plain operation-small-button"
+              ><i class="el-icon-delete">删除</i
             ></el-button>
           </div>
         </template>

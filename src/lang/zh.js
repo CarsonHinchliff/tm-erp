@@ -68,10 +68,11 @@ export default {
     CustomerList: '客户列表',
     OrderManagement: '销售管理',
     OrderList: '订单列表',
+    IssuedList: '发货管理',
     WarehouseManagement: '仓库管理',
     WarehouseList: '库存列表',
     WarehouseIncome: '入库管理',
-    WarehouseInventory: '出库管理'
+    WarehouseInventory: '库存管理'
   },
   navbar: {
     logOut: '退出登录',

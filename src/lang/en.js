@@ -68,6 +68,7 @@ export default {
     CustomerList: 'List',
     OrderManagement: 'Order',
     OrderList: 'List',
+    IssuedList: 'Issued',
     WarehouseManagement: 'Warehouse',
     WarehouseList: 'List',
     WarehouseIncome: 'Income',

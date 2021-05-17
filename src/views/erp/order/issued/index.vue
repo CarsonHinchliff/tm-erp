@@ -207,7 +207,7 @@ import { fetchList, saveOrder, deleteOrder, saveIssued } from '@/api/erp/order'
 import orderAddUpdate from './addupdate'
 import orderIssuedAddUpdate from './addupdate.issued'
 import { Message } from 'element-ui'
-import { gridPageArray, getPageParam } from '../common/grid.page'
+import { gridPageArray, getPageParam } from '../../common/grid.page'
 export default {
   components: { orderAddUpdate, orderIssuedAddUpdate },
   data() {

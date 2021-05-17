@@ -5,6 +5,7 @@
 @import './sidebar.scss';
 @import './btn.scss';
 @import './el-dialog.fix.scss';
+@import './erp.scss';
 
 body {
   height: 100%;
@@ -74,18 +75,6 @@ div:focus{
   padding-left: 5px;
 }
 
-.pl-12 {
-  padding-left: 12px;
-}
-
-.pr-12 {
-  padding-right: 12px;
-}
-
-.full-width{
-  width: 100% !important;
-}
-
 .block {
   display: block;
 }
@@ -142,21 +131,6 @@ code {
 //main-container全局样式
 .app-container {
   padding: 20px;
-}
-
-.flex-container{
-  min-height: calc(100vh - 84px);
-  display: flex;
-  flex-flow: column;
-}
-
-.pagination{
-  background-color: #ebeef5;
-  color: black;
-}
-
-.no-top-border{
-  border-top: 0;
 }
 
 .components-container {
@@ -219,49 +193,3 @@ code {
 .multiselect--active {
   z-index: 1000 !important;
 }
-
-.el-table th{
-  background-color: #ebeef5;
-  color:black;
-}
-
-.app-menu-item{
-  color: blue !important;
-  cursor: default;
-}
-
-.app-menu-item-title{
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.light-bg-hr{
-  height: 1px;
-  background-color: #ebeef5;
-  border: none;
-}
-
-.form-title{
-  border-bottom: 1px solid #ebeef5;
-  padding-bottom: 8px;
-}
-
-.required-star>label::after{
-  content: '*';
-  color: #e94444;
-}
-
-.el-table.required-star::after{
-  content: '*';
-  color: #e94444;
-}
-
-.value-required{
-  border: 1px solid red;
-  border-radius: 5px;
-}
-
-.value-required.el-table{
-  border: 1px solid red;
-}
-
