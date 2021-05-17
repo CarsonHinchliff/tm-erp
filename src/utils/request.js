@@ -29,7 +29,6 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   res => {
-    console.log(res);
     return res;
   },
   /**

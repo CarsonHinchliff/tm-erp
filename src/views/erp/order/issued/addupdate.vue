@@ -263,7 +263,7 @@ export default {
       var tableRef = this.$refs.orderDetailTableRef;
       var isAnyDetailRecord = tableRef.data.length > 0;
 
-      var isPhoneCorrect = this.checkPhone(this.order.phone);
+      var isPhoneCorrect = this.checkPhone(this.issued.phone);
 
       return isAllRequiredFieldFilled && isAnyDetailRecord && isPhoneCorrect;
     }
