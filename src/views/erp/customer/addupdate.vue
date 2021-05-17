@@ -25,7 +25,7 @@
             class="postInfo-container-item required-star"
           >
             <el-input
-              :class="{ 'value-required': !customer.phone && isSaveTriggered }"
+              :class="{ 'value-required': !customer.phone && isSaveTriggered || !checkPhone(customer.phone) }"
               v-model="customer.phone"
               placeholder="请输入电话"
               clearable
@@ -57,6 +57,8 @@
 
 <script>
 import { getCustomer } from '@/api/erp/customer';
+import { isNullOrEmpty } from '@/views/erp/common/common';
+import { checkPhoneFormat } from '@/views/erp/common/phone.number';
 export default {
   name: "customerAddUpdate",
   props: {
@@ -75,6 +77,9 @@ export default {
     this.fetchData(this.customer.id);
   },
   methods: {
+    checkPhone(phone){
+      return isNullOrEmpty(phone) || checkPhoneFormat(phone);
+    },
     fetchData(customerId) {
       if (!customerId) return;
 
@@ -95,7 +100,9 @@ export default {
         }
       );
 
-      return isAllRequiredFieldFilled;
+      var isPhoneCorrect = this.checkPhone(this.customer.phone);
+
+      return isAllRequiredFieldFilled && isPhoneCorrect;
     },
   }
 };

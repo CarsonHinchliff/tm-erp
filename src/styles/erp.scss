@@ -76,5 +76,22 @@
     margin-top: 2px;
     margin-bottom: 2px;
   }
+
+  .blue-color, .blue-color-form-element input{
+      color: #409EFF !important;
+  }
+
+  .bold, .bold-form-element input{
+      font-weight: bold !important;
+  }
+
+  .underline-blue{
+      text-decoration: underline;
+      text-decoration-color: #409EFF;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
   
   

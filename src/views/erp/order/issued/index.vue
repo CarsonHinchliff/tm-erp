@@ -97,6 +97,20 @@
           {{ scope.row.orderDate }}
         </template>
       </el-table-column>
+      <el-table-column :width="minColumnWidth" label="订单号" align="center">
+         <template slot-scope="scope">
+            <el-tooltip
+            placement="top"
+            content="点击以编辑发货详情"
+            :open-delay="0"
+            effect="dark">
+              <div class="bold blue-color underline-blue"
+                @click="clickIssuedFn(scope.row)"
+                >{{ scope.row.orderNum }}
+              </div>
+            </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column :width="minColumnWidth" label="客户姓名" align="center">
         <template slot-scope="scope">
           {{ scope.row.orderCustomerName }}
@@ -221,6 +235,7 @@ export default {
       mergedColumnLabels: [
         'ID',
         '订单日期',
+        '订单号',
         '客户姓名',
         '电话',
         '已发货',
@@ -311,7 +326,8 @@ export default {
             detail.orderId = result.id
             detail.orderAddress = result.address
             detail.orderCustomerName = result.name
-            detail.orderDate = result['order_date']
+            detail.orderDate = result['order_date'],
+            detail.orderNum = result['order_num'],
             detail.orderIssuedAll = result['issued_all'],
             detail.orderIssuedPartial = result['issued_partial'],
             detail.orderCustomerPhone = result.phone

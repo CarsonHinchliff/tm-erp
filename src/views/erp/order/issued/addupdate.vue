@@ -6,7 +6,7 @@
           <el-form-item
             label-width="85px"
             label="订单号:"
-            class="postInfo-container-item required-star"
+            class="postInfo-container-item required-star bold-form-element blue-color-form-element"
           >
             <el-input disabled
               :class="{ 'value-required': !issued.order_num && isSaveTriggered }"
@@ -37,7 +37,7 @@
         <el-col>
           <el-form-item
             label-width="85px"
-            label="电话:"
+            label="客户姓名:"
             class="postInfo-container-item required-star"
           >
             <el-input disabled
@@ -49,11 +49,27 @@
           </el-form-item>
         </el-col>
       </el-row>
+        <el-row>
+        <el-col>
+          <el-form-item
+            label-width="85px"
+            label="客户电话:"
+            class="postInfo-container-item required-star"
+          >
+            <el-input disabled
+              :class="{ 'value-required': !issued.phone && isSaveTriggered || !checkPhone(issued.phone) }"
+              v-model="issued.phone"
+              placeholder="请输入客户电话"
+              clearable
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row>
         <el-col>
           <el-form-item
             label-width="85px"
-            label="地址:"
+            label="客户地址:"
             class="postInfo-container-item required-star"
           >
             <el-input disabled
@@ -166,6 +182,8 @@
 </template>
 
 <script>
+import { isNullOrEmpty } from '@/views/erp/common/common';
+import { checkPhoneFormat } from '@/views/erp/common/phone.number';
 import { getIssued } from '@/api/erp/order';
 import issuedDetailAddUpdate from './addupdate.detail';
 export default {
@@ -191,6 +209,9 @@ export default {
     this.fetchData(this.issued.id);
   },
   methods: {
+    checkPhone(phone){
+      return isNullOrEmpty(phone) || checkPhoneFormat(phone);
+    },
     fetchData(orderId) {
       if (!orderId) return;
 
@@ -235,10 +256,12 @@ export default {
         }
       )
 
-      var tableRef = this.$refs.orderDetailTableRef
-      var isAnyDetailRecord = tableRef.data.length > 0
+      var tableRef = this.$refs.orderDetailTableRef;
+      var isAnyDetailRecord = tableRef.data.length > 0;
 
-      return isAllRequiredFieldFilled && isAnyDetailRecord
+      var isPhoneCorrect = this.checkPhone(this.order.phone);
+
+      return isAllRequiredFieldFilled && isAnyDetailRecord && isPhoneCorrect;
     }
   }
 };

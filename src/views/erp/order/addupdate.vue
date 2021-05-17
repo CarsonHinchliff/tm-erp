@@ -6,7 +6,7 @@
           <el-form-item
             label-width="85px"
             label="订单号:"
-            class="postInfo-container-item"
+            class="postInfo-container-item bold-form-element blue-color-form-element"
           >
             <el-input
               v-model="order.order_num"
@@ -75,7 +75,7 @@
             class="postInfo-container-item required-star"
           >
             <el-input
-              :class="{ 'value-required': !order.phone && isSaveTriggered }"
+              :class="{ 'value-required': !order.phone && isSaveTriggered || !checkPhone(order.phone) }"
               v-model="order.phone"
               placeholder="请输入客户电话"
               clearable
@@ -198,6 +198,8 @@
 </template>
 
 <script>
+import { isNullOrEmpty } from '@/views/erp/common/common';
+import { checkPhoneFormat } from '@/views/erp/common/phone.number';
 import { getOrder } from '@/api/erp/order'
 import orderDetailAddUpdate from './addupdate.detail'
 export default {
@@ -229,6 +231,9 @@ export default {
     this.ensureOrderEntity()
   },
   methods: {
+    checkPhone(phone){
+      return isNullOrEmpty(phone) || checkPhoneFormat(phone);
+    },
     ensureOrderEntity() {
       if (!this.order.order_detail) {
         this.order.order_detail = []
@@ -283,10 +288,12 @@ export default {
         }
       )
 
-      var tableRef = this.$refs.orderDetailTableRef
-      var isAnyDetailRecord = tableRef.data.length > 0
+      var tableRef = this.$refs.orderDetailTableRef;
+      var isAnyDetailRecord = tableRef.data.length > 0;
 
-      return isAllRequiredFieldFilled && isAnyDetailRecord
+      var isPhoneCorrect = this.checkPhone(this.order.phone);
+
+      return isAllRequiredFieldFilled && isAnyDetailRecord && isPhoneCorrect;
     }
   }
 }
