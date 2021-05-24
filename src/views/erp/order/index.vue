@@ -14,6 +14,7 @@
                 class="full-width"
                 type="date"
                 placeholder="选择日期"
+                @change="filterDateChange"
               />
             </el-form-item>
           </el-col>
@@ -64,6 +65,15 @@
     <div><hr class="light-bg-hr" ></div>
     <div>
       <div class="fr">
+        <el-button
+          type="info"
+          @click="resetFilter"
+          :disabled="!filterResetBtnEnabled"
+        ><span
+        ><i class="el-icon-circle-close"/><span class="icon-name">重置</span></span
+        ></el-button
+        >
+        <span/>
         <el-button
           type="primary"
           @click="fetchData"
@@ -145,7 +155,7 @@
       </el-table-column>
       <el-table-column :width="minColumnWidth" label="总价" align="center">
         <template slot-scope="scope">
-          {{ scope.row["total_price"] }}
+          {{ scope.row["totalPrice"] }}
         </template>
       </el-table-column>
       <el-table-column label="电话" width="115" align="center">
@@ -272,6 +282,11 @@ export default {
     },
     addUpdateIssuedTitle: function(){
       return '编辑发货';
+    },
+    filterResetBtnEnabled: function(){
+      return Object.entries(this.filter).filter(entry => {
+        return entry[1] !== "" && entry[1] !== null && entry[1] !== false;
+      }).length > 0;
     }
   },
   created() {
@@ -287,6 +302,16 @@ export default {
       }
    },
   methods: {
+    resetFilter(){
+      this.filter = {}
+    },
+    filterDateChange(value){
+      if(null == value){
+        this.$nextTick(() => {
+          this.fetchData();
+        })    
+      }
+    },
     rowdblClickFn(row, column){
       this.clickEditFn(row);
     },
@@ -346,7 +371,12 @@ export default {
     transMergedResult(results) {
       var orderDetailsResult = [];
       (results || []).forEach((result) => {
-        var orderDetails = result['order_detail'] || []
+        let orderDetails = result['order_detail'] || []
+        let total_price = 0;
+        orderDetails.forEach(function(val) {
+          total_price += val['total_price'];
+        }, 0);
+        console.log(total_price);
         if (orderDetails.length > 0) {
           orderDetails.forEach((detail) => {
             detail.orderId = result.id
@@ -356,13 +386,14 @@ export default {
             detail.orderNum = result['order_num'],
             detail.orderIssuedAll = result['issued_all']
             detail.orderCustomerPhone = result.phone
+            detail.totalPrice = total_price
           })
 
           orderDetailsResult.push(...orderDetails)
         }
       })
 
-      return orderDetailsResult
+      return orderDetailsResult;
     },
     handleSizeChange(val) {
       this.pagesize = val

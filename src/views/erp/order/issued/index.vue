@@ -14,6 +14,7 @@
                 class="full-width"
                 type="date"
                 placeholder="选择日期"
+                @change="filterDateChange"
               />
             </el-form-item>
           </el-col>
@@ -64,6 +65,15 @@
     <div><hr class="light-bg-hr" ></div>
     <div>
       <div class="fr">
+        <el-button
+          type="info"
+          @click="resetFilter"
+          :disabled="!filterResetBtnEnabled"
+        ><span
+        ><i class="el-icon-circle-close"/><span class="icon-name">重置</span></span
+        ></el-button
+        >
+        <span/>
         <el-button
           type="primary"
           @click="fetchData"
@@ -239,7 +249,7 @@ export default {
         '客户姓名',
         '电话',
         '已发货',
-        '总价',
+        '部分发货',
         '操作'
       ],
       spanArr: [], // 遍历数据时，根据相同的标识去存储记录
@@ -250,6 +260,11 @@ export default {
     addUpdateTitle: function() {
       return '编辑发货';
     },
+    filterResetBtnEnabled: function(){
+      return Object.entries(this.filter).filter(entry => {
+        return entry[1] !== "" && entry[1] !== null && entry[1] !== false;
+      }).length > 0;
+    }
   },
   created() {
     this.fetchData()
@@ -261,6 +276,16 @@ export default {
       }
    },
   methods: {
+    resetFilter(){
+      this.filter = {}
+    },
+    filterDateChange(value){
+      if(null == value){
+        this.$nextTick(() => {
+          this.fetchData();
+        })    
+      }
+    },
     rowdblClickFn(row, column){
       this.clickIssuedFn(row);
     },
@@ -391,7 +416,7 @@ export default {
       var issued = this.$refs.issuedRef.issued;
       var savePromise = this.addUpdateMode == 'edit' ?
         putIssued(
-          issued.orderId,
+          issued.id,
           issued) :
         saveIssued(issued);
 
