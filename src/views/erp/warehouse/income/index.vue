@@ -50,6 +50,15 @@
     <div><hr class="light-bg-hr" /></div>
     <div>
       <div class="fr">
+        <el-button
+          type="info"
+          @click="resetFilter"
+          :disabled="!filterResetBtnEnabled"
+        ><span
+        ><i class="el-icon-circle-close"/><span class="icon-name">重置</span></span
+        ></el-button
+        >
+        <span></span>
         <el-button @click="fetchData" type="primary"
           ><span
             ><i class="el-icon-search"></i
@@ -106,7 +115,7 @@
           {{ scope.row.amount }}
         </template>
       </el-table-column>
- <el-table-column label="操作" width="135" align="center">
+      <el-table-column label="操作" width="135" align="center">
         <template slot-scope="scope">
           <div class="el-row">
             <el-button
@@ -187,8 +196,16 @@ export default {
           : "编辑") + "入库信息"
       );
     },
+    filterResetBtnEnabled: function(){
+      return Object.entries(this.filter).filter(entry => {
+        return entry[1] !== "" && entry[1] !== null && entry[1] !== false;
+      }).length > 0;
+    }
   },
   methods: {
+    resetFilter(){
+      this.filter = {}
+    },
     rowdblClickFn(row, column){
       this.clickEditFn(row);
     },

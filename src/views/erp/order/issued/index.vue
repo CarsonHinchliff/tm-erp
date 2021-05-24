@@ -73,7 +73,7 @@
         ><i class="el-icon-circle-close"/><span class="icon-name">重置</span></span
         ></el-button
         >
-        <span/>
+        <span></span>
         <el-button
           type="primary"
           @click="fetchData"
@@ -81,7 +81,7 @@
         ><i class="el-icon-search"/><span class="icon-name">查询</span></span
         ></el-button
         >
-        <span/>      
+        <span></span>      
       </div>
     </div>
     <div><hr class="light-bg-hr" ></div>
@@ -203,7 +203,7 @@
     </div>
     <el-dialog :visible.sync="addupdateFormVisible">
       <template slot="title">
-        <div class="form-title">{{ addUpdateTitle }}<span/></div>
+        <div class="form-title">{{ addUpdateTitle }}<span></span></div>
       </template>
       <issuedAddUpdate ref="issuedRef" :order-id="currentEditIssued.orderId" :key="issuedRefKey"/>
       <div slot="footer" class="dialog-footer">

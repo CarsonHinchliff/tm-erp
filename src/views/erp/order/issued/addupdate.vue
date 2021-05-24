@@ -167,7 +167,7 @@
     </el-form>
     <el-dialog :visible.sync="addupdateFormVisible" append-to-body>
       <template slot="title">
-        <div class="form-title">编辑发货明细<span/></div>
+        <div class="form-title">编辑发货明细<span></span></div>
       </template>
       <issuedDetailAddUpdate
         ref="issuedDetailRef"

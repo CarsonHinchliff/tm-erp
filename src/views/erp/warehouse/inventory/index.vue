@@ -14,6 +14,7 @@
                 v-model="filter.date"
                 type="date"
                 placeholder="选择日期"
+                @change="filterDateChange"
               >
               </el-date-picker>
             </el-form-item>
@@ -49,6 +50,15 @@
     <div><hr class="light-bg-hr" /></div>
     <div>
       <div class="fr">
+        <el-button
+          type="info"
+          @click="resetFilter"
+          :disabled="!filterResetBtnEnabled"
+        ><span
+        ><i class="el-icon-circle-close"/><span class="icon-name">重置</span></span
+        ></el-button
+        >
+        <span></span>
         <el-button @click="fetchData" type="primary"
           ><span
             ><i class="el-icon-search"></i
@@ -176,8 +186,23 @@ export default {
           : "编辑") + "出库信息"
       );
     },
+    filterResetBtnEnabled: function(){
+      return Object.entries(this.filter).filter(entry => {
+        return entry[1] !== "" && entry[1] !== null && entry[1] !== false;
+      }).length > 0;
+    }
   },
   methods: {
+    resetFilter(){
+      this.filter = {}
+    },
+    filterDateChange(value){
+      if(null == value){
+        this.$nextTick(() => {
+          this.fetchData();
+        })    
+      }
+    },
     rowdblClickFn(row, column){
       this.clickEditFn(row);
     },
